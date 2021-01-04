@@ -1,0 +1,101 @@
+title: "WordPress on OCI with MDS"
+stackDescription: "WordPress on OCI with MySQL Database Service"
+schemaVersion: 1.2.0
+version: "20201104"
+locale: "en"
+
+variableGroups:
+  - title: General Configuration
+    visible: false
+    variables:
+      - tenancy_ocid
+      - compartment_ocid    
+      - region
+
+  - title: Required Variables
+    visible: true
+    variables:
+      - admin_username
+      - admin_password
+      - wp_name
+      - wp_password
+      - wp_schema
+
+  - title: Compute
+    visible: true
+    variables:
+      - node_shape
+      - mysql_shape
+
+  - title: Network
+    visible: true
+    variables:
+      - vcn
+      - vcn_cidr
+
+variables:
+  region:
+    type: oci:identity:region:name
+    visible: false
+    required: true
+    title: ${Messages.solutionsHub.genericVariables.region.title()}
+    description: ${Messages.solutionsHub.genericVariables.region.description()}
+
+  vcn:
+    type: string
+    visible: false
+    required: true
+    title: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_display_name.title()}
+    description: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_display_name.description()}
+
+  vcn_cidr:
+    type: string
+    visible: false
+    required: false
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    title: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_cidr.title()}
+    description: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_cidr.description()}
+
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    title: Compartment
+    description: Compartment where you want to create the solution resources
+
+  admin_username:
+    type: string
+    required: true
+    title: MDS Admin Username
+    description: MySQL Database Service's admin username
+    minLength: 1
+    maxLength: 14
+    pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
+
+  admin_password:
+    type: password
+    required: true
+    title: MDS Admin User's Password
+    description: Password for MySQL Database Service's admin user
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
+  wp_password:
+    type: password
+    required: true
+    title: MySQL WordPress User's Password
+    description: MySQL Password for WordPress User
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
+  wp_name:
+    type: string
+    required: true
+    title: MySQL WordPress Username
+    description: MySQL Username for WordPress
+    minLength: 3
+    maxLength: 14
+    pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
+
+  wp_schema:
+    type: string
+    required: true
+    title: MySQL WordPress Schema
+    description: MySQL Schema/Database for WordPress

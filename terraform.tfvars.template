@@ -1,10 +1,19 @@
-user_ocid = "ocid1.user.oc1.."
-fingerprint = "1c.."
-private_key_path = "~/.oci/oci_api_key.pem"
-tenancy_ocid = "ocid1.tenancy.oc1.."
-region = "us-ashburn-1"
+# Oracle Cloud Infrastructure Authentication
+tenancy_ocid = "ocid1.tenancy.<REPLACE_ME>"
+user_ocid = "ocid1.user.oc1..<REPLACE_ME>"
+fingerprint= "<REPLACE_ME>"
+private_key_path = "<REPLACE_ME>.pem"
 
-compute_compartment_ocid = "ocid1.compartment.oc1."
-network_compartment_ocid = "ocid1.compartment.oc1."
-availability_domain_number = "1"
-ssh_public_key = "ssh-rsa AAA...H"
+# Region
+region = "<REPLACE_ME>" # example: eu-frankfurt-1
+
+# Compartment
+compartment_ocid = "ocid1.compartment.<REPLACE_ME>"
+# Keys Configration
+ssh_authorized_keys_path = "<REPLACE_ME>.pub"
+ssh_private_key_path = "<REPLACE_ME>"
+
+admin_username = "admin"
+admin_password = "MyPassw0rd!"
+
+node_shape = "VM.Standard.E2.1"
