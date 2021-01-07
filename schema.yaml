@@ -165,3 +165,36 @@ variables:
     required: false
     title: "MDS WordPress Schema"
     description: "Type MySQL Schema/Database for WordPress."
+
+outputs:
+
+  generated_ssh_private_key:
+    title: "Generated SSH Private Key"
+    displayText: "Generated SSH Private Key"
+    type: copyableString
+    visible: true
+
+  wordpress_public_ip:
+    title: "WordPress CMS Public IP"
+    displayText: "WordPress CMS Public IP"
+    type: string
+    visible: true
+
+  wordpress_db_user:
+    title: "WordPress Database User"
+    displayText: "WordPress Database User"
+    type: string
+    visible: true
+
+  wordpress_db_password:
+    title: "WordPress Database User Password"
+    displayText: "WordPress Database User Password"
+    type: string
+    visible: true
+
+  mds_private_ip:
+    title: "MDS Private IP"
+    displayText: "MDS Private IP"
+    type: string
+    visible: true
+    
