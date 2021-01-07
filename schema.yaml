@@ -124,7 +124,7 @@ variables:
 
   label_prefix:
     type: string
-    required: true
+    required: false
     title: "WordPress Hostname Prefix"
     description: "Type WordPress Hostname Prefix."
 
@@ -153,15 +153,15 @@ variables:
 
   wp_name:
     type: string
-    required: true
+    required: false
     title: "MDS WordPress Username"
     description: "Type MySQL Username for WordPress."
-    minLength: 3
+    minLength: 2
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
 
   wp_schema:
     type: string
-    required: true
+    required: false
     title: "MDS WordPress Schema"
     description: "Type MySQL Schema/Database for WordPress."
