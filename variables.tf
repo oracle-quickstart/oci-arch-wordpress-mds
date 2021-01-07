@@ -53,7 +53,7 @@ variable "wp_name" {
 
 variable "wp_password" {
   description = "WordPress Database User Password."
-  default     = "MyWPpassw0rd!"  
+#  default     = "MyWPpassw0rd!"  
 }
 
 variable "wp_schema" {
