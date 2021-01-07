@@ -1,72 +1,138 @@
-title: "WordPress on OCI with MDS"
-stackDescription: "WordPress on OCI with MySQL Database Service"
+title: "Deploy WordPress CMD on OCI with MDS"
+stackDescription: "Deploy WordPress CMS on OCI with MySQL Database Service"
 schemaVersion: 1.2.0
 version: "20201104"
 locale: "en"
 
 variableGroups:
-  - title: General Configuration
-    visible: false
-    variables:
-      - tenancy_ocid
-      - compartment_ocid    
-      - region
+- title: General Configuration
+  visible: false
+  variables:
+  - tenancy_ocid
 
-  - title: Required Variables
-    visible: true
-    variables:
-      - admin_username
-      - admin_password
-      - wp_name
-      - wp_password
-      - wp_schema
+- title: Required Configuration
+  visible: true  
+  variables:
+  - compartment_ocid
+  - region
+  - availablity_domain_name 
+  - admin_password
+  - wp_password
 
-  - title: Compute
-    visible: true
-    variables:
-      - node_shape
-      - mysql_shape
-
-  - title: Network
-    visible: true
-    variables:
-      - vcn
-      - vcn_cidr
+- title: Optional Configuration
+  visible: true
+  variables:
+  - vcn
+  - vcn_cidr
+  - instance_os
+  - linux_os_version
+  - label_prefix
+  - node_shape
+  - mysql_shape
+  - admin_username
+  - wp_name
+  - wp_schema
 
 variables:
+
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    visibile: true
+    title: "Compartment"
+    description: "Compartment where your WordPress and MDS will be deployed."
+
   region:
     type: oci:identity:region:name
-    visible: false
     required: true
-    title: ${Messages.solutionsHub.genericVariables.region.title()}
-    description: ${Messages.solutionsHub.genericVariables.region.description()}
+    visibile: true
+    title: "Region"
+    description: "Choose Region where your WordPress and MDS will be deployed."
+
+  availablity_domain_name:
+    type: oci:identity:availabilitydomain:name
+    required: true
+    visibile: true
+    title: "Availability Domain to be chosen"
+    description: "Choose Availability Domain where your WordPress and MDS will be deployed."
+    dependsOn:
+      compartmentId: ${compartment_ocid}
 
   vcn:
     type: string
     visible: false
     required: true
-    title: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_display_name.title()}
-    description: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_display_name.description()}
+    title: "VCN name"
+    description: "Type VCN name where your WordPress and MDS will be deployed."
 
   vcn_cidr:
     type: string
     visible: false
     required: false
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
-    title: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_cidr.title()}
-    description: ${Messages.solutionsHub.solutions.defaultVCN.variables.vcn_cidr.description()}
+    title: "VCN CIDR"
+    description: "Choose VCN CIDR for your WordPress and MDS deployments."
 
-  compartment_ocid:
-    type: oci:identity:compartment:id
+  node_shape:
+    type: oci:core:instanceshape:name
+    required: false
+    title: "Wordpress node shape"
+    description: "Choose Instance Shape for WordPress host."
+    default: "VM.Standard2.1"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  instance_os:
+    type: enum
+    required: false
+    title: "Instance OS"
+    description: "An Operating System that determines the operating system for WordPress host."
+    default: "Oracle Linux"
+    enum:
+      - "Oracle Linux"
+
+  linux_os_version:
+    type: enum
+    required: false
+    title: "Instance OS version"
+    description: "An Operating System version that determines the operating system version for WordPress host."
+    default: "7.8"
+    enum:
+      - "7.8"
+
+  mysql_shape:
+    type: enum
+    required: false
+    default: "VM.Standard.E2.1"
+    title: "MDS Shape"
+    description: "Choose MDS Shape for your WordPress and MDS deployments."
+    enum:
+      - "VM.Standard.E2.1"
+      - "VM.Standard.E2.2"
+      - "VM.Standard.E2.4"  
+      - "VM.Standard.E2.8"
+      - "MySQL.VM.Standard.E3.1.8GB"
+      - "MySQL.VM.Standard.E3.1.16GB"      
+      - "MySQL.VM.Standard.E3.2.32GB"
+      - "MySQL.VM.Standard.E3.4.64GB"
+      - "MySQL.VM.Standard.E3.8.128GB"
+      - "MySQL.VM.Standard.E3.16.256GB"
+      - "MySQL.VM.Standard.E3.24.384GB"
+      - "MySQL.VM.Standard.E3.32.512GB"
+      - "MySQL.VM.Standard.E3.48.768GB"    
+      - "MySQL.VM.Standard.E3.64.1024GB"        
+
+  label_prefix:
+    type: string
     required: true
-    title: Compartment
-    description: Compartment where you want to create the solution resources
+    title: "WordPress Hostname Prefix"
+    description: "Type WordPress Hostname Prefix."
 
   admin_username:
     type: string
-    required: true
-    title: MDS Admin Username
-    description: MySQL Database Service's admin username
+    required: false
+    title: "MDS Admin Username"
+    description: "Type MySQL Database Service's admin username."
     minLength: 1
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
@@ -74,22 +140,22 @@ variables:
   admin_password:
     type: password
     required: true
-    title: MDS Admin User's Password
-    description: Password for MySQL Database Service's admin user
+    title: "MDS Admin User's Password"
+    description: "Choose password for MySQL Database System admin user."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
   wp_password:
     type: password
     required: true
-    title: MySQL WordPress User's Password
-    description: MySQL Password for WordPress User
+    title: "MDS WordPress User's Password"
+    description: "Choose MySQL Password for WordPress User."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
   wp_name:
     type: string
     required: true
-    title: MySQL WordPress Username
-    description: MySQL Username for WordPress
+    title: "MDS WordPress Username"
+    description: "Type MySQL Username for WordPress."
     minLength: 3
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
@@ -97,5 +163,5 @@ variables:
   wp_schema:
     type: string
     required: true
-    title: MySQL WordPress Schema
-    description: MySQL Schema/Database for WordPress
+    title: "MDS WordPress Schema"
+    description: "Type MySQL Schema/Database for WordPress."
