@@ -32,6 +32,12 @@ variableGroups:
   - admin_username
   - wp_name
   - wp_schema
+  - wp_plugins
+  - wp_site_url
+  - wp_site_title
+  - wp_site_admin_user
+  - wp_site_admin_pass
+  - wp_site_admin_email
 
 variables:
 
@@ -165,6 +171,42 @@ variables:
     required: false
     title: "MDS WordPress Schema"
     description: "Type MySQL Schema/Database for WordPress."
+
+  wp_plugins:
+    type: string
+    required: false
+    title: "MDS WordPress Plugins"
+    description: "Define WordPress Plugins to be installed with wp-cli."
+
+  wp_site_url:
+    type: string
+    required: false
+    title: "WordPress Site URL"
+    description: "Define WordPress Site URL"
+
+  wp_site_title:
+    type: string
+    required: false
+    title: "WordPress Site Title"
+    description: "Define WordPress Site Title"
+
+  wp_site_admin_user:
+    type: string
+    required: false
+    title: "WordPress Site Admin Username"
+    description: "Define WordPress Site Admin Username"
+
+  wp_site_admin_pass:
+    type: string
+    required: false
+    title: "WordPress Site Admin Password"
+    description: "Define WordPress Site Admin Password"
+  
+  wp_site_admin_email:
+    type: string
+    required: false
+    title: "WordPress Site Admin Email"
+    description: "Define WordPress Site Admin E-mail"
 
 outputs:
 

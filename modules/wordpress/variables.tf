@@ -32,11 +32,6 @@ variable "label_prefix" {
   default     = ""
 }
 
-variable "assign_public_ip" {
-  description = "Whether the VNIC should be assigned a public IP address. Default 'false' do not assign a public IP address. "
-  default     = true
-}
-
 variable "ssh_authorized_keys" {
   description = "Public SSH keys path to be included in the ~/.ssh/authorized_keys file for the default user on the instance. "
   default     = ""
@@ -73,7 +68,6 @@ variable "admin_username" {
     description = "Username od the MDS admin account"
 }
 
-
 variable "admin_password" {
     description = "Password for the admin user for MDS"
 }
@@ -81,3 +75,40 @@ variable "admin_password" {
 variable "mds_ip" {
     description = "Private IP of the MDS Instance"
 }
+
+variable "wp_plugins" {
+  type        = list(string)
+  description = "A list of WordPress plugins to install."
+  default     = ["hello-dolly"]
+}
+
+variable "wp_themes" {
+  type        = list(string)
+  description = "A list of WordPress themes to install."
+  default     = ["lodestar","twentysixteen"]
+}
+
+variable "wp_site_url" {
+  description = "WordPress Site URL"
+  default = "example.com"
+}
+
+variable "wp_site_title" {
+  description = "WordPress Site Title"
+  default = "Yet Another WordPress Site"
+}
+
+variable "wp_site_admin_user" {
+  description = "WordPress Site Admin Username"
+  default = "admin"
+}
+
+variable "wp_site_admin_pass" {
+  description = "WordPress Site Admin Password"
+  default = ""
+}
+
+variable "wp_site_admin_email" {
+  description = "WordPress Site Admin Email"
+  default = "admin@example.com"  
+} 

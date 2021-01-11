@@ -60,3 +60,41 @@ variable "wp_schema" {
   description = "WordPress MySQL Schema"
   default     = "wordpress"  
 }
+
+variable "wp_plugins" {
+  type        = list(string)
+  description = "WordPress Plugins"
+  default     = ["hello-dolly"]  
+}
+
+variable "wp_themes" {
+  type        = list(string)
+  description = "A list of WordPress themes to install."
+  default     = ["lodestar","twentysixteen"]
+}
+
+variable "wp_site_url" {
+  description = "WordPress Site URL"
+  default = "example.com"
+}
+
+variable "wp_site_title" {
+  description = "WordPress Site Title"
+  default = "Yet Another WordPress Site"
+}
+
+
+variable "wp_site_admin_user" {
+  description = "WordPress Site Admin Username"
+  default = "admin"
+}
+
+variable "wp_site_admin_pass" {
+  description = "WordPress Site Admin Password"
+  default = ""
+}
+
+variable "wp_site_admin_email" {
+  description = "WordPress Site Admin Email"
+  default = "admin@example.com"  
+} 

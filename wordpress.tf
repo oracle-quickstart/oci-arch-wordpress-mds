@@ -14,4 +14,10 @@ module "wordpress" {
   wp_schema             = var.wp_schema
   wp_name               = var.wp_name
   wp_password           = var.wp_password
+  wp_plugins            = var.wp_plugins
+  wp_themes             = var.wp_themes
+  wp_site_title         = var.wp_site_title
+  wp_site_admin_user    = var.wp_site_admin_user
+  wp_site_admin_pass    = var.wp_site_admin_pass
+  wp_site_admin_email   = var.wp_site_admin_email
 }
