@@ -65,16 +65,60 @@ variables:
     dependsOn:
       compartmentId: ${compartment_ocid}
 
+  admin_password:
+    type: password
+    required: true
+    title: "MDS Admin User's Password"
+    description: "Choose password for MySQL Database System admin user."
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
+  wp_password:
+    type: password
+    required: true
+    title: "MDS WordPress User's Password"
+    description: "Choose MySQL Password for WordPress User."
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
+  wp_site_title:
+    type: string
+    required: false
+    visible: true
+    title: "WordPress Site Title"
+    description: "Define WordPress Site Title"
+
+  wp_site_admin_user:
+    type: string
+    required: true
+    visible: true
+    default: "admin"
+    title: "WordPress Site Admin Username"
+    description: "Define WordPress Site Admin Username"
+
+  wp_site_admin_pass:
+    type: password
+    required: true
+    visible: true
+    title: "WordPress Site Admin Password"
+    description: "Define WordPress Site Admin Password"
+  
+  wp_site_admin_email:
+    type: string
+    visible: true
+    required: true
+    default: "admin@example.com"
+    title: "WordPress Site Admin Email"
+    description: "Define WordPress Site Admin E-mail"
+
   vcn:
     type: string
-    visible: false
+    visible: true
     required: true
     title: "VCN name"
     description: "Type VCN name where your WordPress and MDS will be deployed."
 
   vcn_cidr:
     type: string
-    visible: false
+    visible: true
     required: false
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     title: "VCN CIDR"
@@ -144,20 +188,6 @@ variables:
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
 
-  admin_password:
-    type: password
-    required: true
-    title: "MDS Admin User's Password"
-    description: "Choose password for MySQL Database System admin user."
-    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
-
-  wp_password:
-    type: password
-    required: true
-    title: "MDS WordPress User's Password"
-    description: "Choose MySQL Password for WordPress User."
-    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
-
   wp_name:
     type: string
     required: false
@@ -184,30 +214,6 @@ variables:
     required: false
     title: "WordPress Site URL"
     description: "Define WordPress Site URL"
-
-  wp_site_title:
-    type: string
-    required: false
-    title: "WordPress Site Title"
-    description: "Define WordPress Site Title"
-
-  wp_site_admin_user:
-    type: string
-    required: true
-    title: "WordPress Site Admin Username"
-    description: "Define WordPress Site Admin Username"
-
-  wp_site_admin_pass:
-    type: string
-    required: true
-    title: "WordPress Site Admin Password"
-    description: "Define WordPress Site Admin Password"
-  
-  wp_site_admin_email:
-    type: string
-    required: true
-    title: "WordPress Site Admin Email"
-    description: "Define WordPress Site Admin E-mail"
 
 outputs:
 

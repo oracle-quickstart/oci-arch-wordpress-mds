@@ -83,7 +83,6 @@ variable "wp_site_title" {
   default = "Yet Another WordPress Site"
 }
 
-
 variable "wp_site_admin_user" {
   description = "WordPress Site Admin Username"
   default = "admin"
