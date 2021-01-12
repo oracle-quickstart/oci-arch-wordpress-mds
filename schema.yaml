@@ -40,7 +40,6 @@ variableGroups:
   - wp_site_url
   - wp_site_title
 
-
 variables:
 
   compartment_ocid:
@@ -214,7 +213,7 @@ variables:
     default: ["hello-dolly","elementor"]
     minItems: 1
     uniqueItems: true
-    description: "Define WordPress Plugins to be installed with wp-cli."
+    description: "Define WordPress Plugins to be installed with wp-cli (minimum 1 plugin)."
 
   wp_themes:
     type: array
@@ -226,7 +225,7 @@ variables:
     default: ["lodestar", "twentysixteen"]
     minItems: 1
     uniqueItems: true
-    description: "Define WordPress Themes to be installed with wp-cli."
+    description: "Define WordPress Themes to be installed with wp-cli (minimum 1 theme)."
 
   wp_site_url:
     type: string
