@@ -21,6 +21,8 @@ variableGroups:
   - wp_site_admin_user
   - wp_site_admin_pass
   - wp_site_admin_email
+  - wp_plugins
+  - wp_themes
 
 - title: Optional Configuration
   visible: true
@@ -35,8 +37,6 @@ variableGroups:
   - admin_username
   - wp_name
   - wp_schema
-  - wp_plugins
-  - wp_themes
   - wp_site_url
   - wp_site_title
 
@@ -208,7 +208,7 @@ variables:
     type: array
     items:
       type: string
-    required: false
+    required: true
     title: "MDS WordPress Plugins"
     default: [ hello-dolly, elementor ]
     minItems: 1
@@ -216,10 +216,10 @@ variables:
     description: "Define WordPress Plugins to be installed with wp-cli."
 
   wp_themes:
-    type: string
+    type: array
     items:
       type: string
-    required: false
+    required: true
     title: "MDS WordPress Themes"
     default: [ lodestar, twentysixteen ]
     minItems: 1
