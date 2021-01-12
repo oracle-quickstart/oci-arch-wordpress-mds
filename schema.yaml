@@ -9,12 +9,12 @@ variableGroups:
   visible: false
   variables:
   - tenancy_ocid
+  - region
 
 - title: Required Configuration
   visible: true  
   variables:
   - compartment_ocid
-  - region
   - availablity_domain_name 
   - admin_password
   - wp_password
@@ -112,14 +112,14 @@ variables:
 
   vcn:
     type: string
-    visible: true
+    visible: false
     required: true
     title: "VCN name"
     description: "Type VCN name where your WordPress and MDS will be deployed."
 
   vcn_cidr:
     type: string
-    visible: true
+    visible: false
     required: false
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     title: "VCN CIDR"
@@ -137,6 +137,7 @@ variables:
   instance_os:
     type: enum
     required: false
+    visible: false
     title: "Instance OS"
     description: "An Operating System that determines the operating system for WordPress host."
     default: "Oracle Linux"
@@ -146,6 +147,7 @@ variables:
   linux_os_version:
     type: enum
     required: false
+    visible: false
     title: "Instance OS version"
     description: "An Operating System version that determines the operating system version for WordPress host."
     default: "7.8"
@@ -177,6 +179,7 @@ variables:
   label_prefix:
     type: string
     required: false
+    visible: false
     title: "WordPress Hostname Prefix"
     description: "Type WordPress Hostname Prefix."
 
