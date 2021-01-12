@@ -70,7 +70,7 @@ wp_password = "<wp_user_password>"
 # WordPress Themes to be installed by WP-CLI (minimum 1 theme)
 wp_themes = "lodestar,twentysixteen"
 
-# WordPress Themes to be installed by WP-CLI (minimum 1 theme)
+# WordPress Plugins to be installed by WP-CLI (minimum 1 plugin)
 wp_plugins = "hello-dolly,elementor"
 
 # WordPress Site Title
