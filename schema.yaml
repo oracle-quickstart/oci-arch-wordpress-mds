@@ -63,6 +63,7 @@ variables:
     title: "Availability Domain to be chosen"
     description: "Choose Availability Domain where your WordPress and MDS will be deployed."
     dependsOn:
+      region: ${region}
       compartmentId: ${compartment_ocid}
 
   admin_password:
