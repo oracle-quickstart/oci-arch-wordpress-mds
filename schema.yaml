@@ -36,6 +36,7 @@ variableGroups:
   - wp_name
   - wp_schema
   - wp_plugins
+  - wp_themes
   - wp_site_url
   - wp_site_title
 
@@ -204,10 +205,26 @@ variables:
     description: "Type MySQL Schema/Database for WordPress."
 
   wp_plugins:
-    type: string
+    type: array
+    items:
+      type: string
     required: false
     title: "MDS WordPress Plugins"
+    default: [ hello-dolly, elementor ]
+    minItems: 1
+    uniqueItems: true
     description: "Define WordPress Plugins to be installed with wp-cli."
+
+  wp_themes:
+    type: string
+    items:
+      type: string
+    required: false
+    title: "MDS WordPress Themes"
+    default: [ lodestar, twentysixteen ]
+    minItems: 1
+    uniqueItems: true
+    description: "Define WordPress Themes to be installed with wp-cli."
 
   wp_site_url:
     type: string

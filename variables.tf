@@ -64,7 +64,7 @@ variable "wp_schema" {
 variable "wp_plugins" {
   type        = list(string)
   description = "WordPress Plugins"
-  default     = ["hello-dolly"]  
+  default     = ["hello-dolly","elementor"]  
 }
 
 variable "wp_themes" {
