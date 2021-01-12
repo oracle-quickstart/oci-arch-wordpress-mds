@@ -11,6 +11,8 @@ sudo mv wp-cli.phar /usr/local/bin/wp
 echo '${wp_site_admin_pass}' >> admin_password.txt
 /usr/local/bin/wp core install --path='/var/www/html/'  --url=${wp_site_url} --title='${wp_site_title}' --admin_user=${wp_site_admin_user} --admin_email=${wp_site_admin_email} --prompt=admin_password < admin_password.txt
 chown -R apache:apache /var/www/html/
-/usr/local/bin/wp plugin install ${wp_plugins} --activate --path='/var/www/html/'
+/usr/local/bin/wp plugin install ${wp_plugins} --path='/var/www/html/'
+chown -R apache:apache /var/www/html/
 /usr/local/bin/wp theme install ${wp_themes} --path='/var/www/html/'
+chown -R apache:apache /var/www/html/
 echo "wp-cli installed, wp config, user, plugin theme executed."

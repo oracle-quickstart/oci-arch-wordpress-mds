@@ -2,12 +2,16 @@ output "wordpress_public_ip" {
   value = "${module.wordpress.public_ip}"
 }
 
-output "wordpress_db_user" {
-  value = var.wp_name
+output "wordpress_wp-admin_url" {
+  value = "http://${module.wordpress.public_ip}/wp-admin/"
 }
 
-output "wordpress_db_password" {
-  value = var.wp_password
+output "wordpress_wp-admin_user" {
+  value = var.wp_site_admin_user
+}
+
+output "wordpress_wp-admin_password" {
+  value = var.wp_site_admin_pass
 }
 
 output "mds_instance_ip" {
