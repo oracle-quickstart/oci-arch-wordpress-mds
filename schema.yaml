@@ -208,7 +208,7 @@ variables:
     type: array
     items:
       type: string
-      pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\\-])$"
+      pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\\-])+$"
     required: true
     title: "MDS WordPress Plugins"
     default: [ hello-dolly, elementor ]
@@ -220,7 +220,7 @@ variables:
     type: array
     items:
       type: string
-      pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\\-])$"
+      pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\\-])+$"
     required: true
     title: "MDS WordPress Themes"
     default: [ lodestar, twentysixteen ]
