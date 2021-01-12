@@ -62,16 +62,12 @@ variable "wp_schema" {
 }
 
 variable "wp_plugins" {
-#  type        = list(string)
   description = "WordPress Plugins"
-#  default     = ["hello-dolly","elementor"]  
   default     = "hello-dolly,elementor"
 }
 
 variable "wp_themes" {
-#  type        = list(string)
   description = "A list of WordPress themes to install."
-#  default     = ["lodestar","twentysixteen"]
   default     = "lodestar,twentysixteen"
 }
 

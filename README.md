@@ -64,6 +64,28 @@ compartment_ocid = "<compartment_ocid>"
 # MySQL DBSystem Admin Password 
 admin_password = "<admin_password>"
 
+# WordPress MySQL Database User Password
+wp_password = "<wp_user_password>"
+
+# WordPress Themes to be installed by WP-CLI (minimum 1 theme)
+wp_themes = "lodestar,twentysixteen"
+
+# WordPress Themes to be installed by WP-CLI (minimum 1 theme)
+wp_plugins = "hello-dolly,elementor"
+
+# WordPress Site Title
+wp_site_title = "<WordPress_site_title>"
+       
+# WordPress WP-Admin User
+wp_site_admin_user = "<wp-admin_user>"
+
+# WordPress WP-Admin Password
+wp_site_admin_pass = "<wp-admin_password>"
+
+# WordPress WP-Admin e-mail address
+wp_site_admin_email = "<wp-admin_email>"
+
+
 ````
 
 ### Create the Resources
