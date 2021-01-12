@@ -211,7 +211,7 @@ variables:
       pattern: "^[a-zA-Z0-9\\-]+$"
     required: true
     title: "MDS WordPress Plugins"
-    default: [ hello-dolly, elementor ]
+    default: ["hello-dolly","elementor"]
     minItems: 1
     uniqueItems: true
     description: "Define WordPress Plugins to be installed with wp-cli."
@@ -223,7 +223,7 @@ variables:
       pattern: "^[a-zA-Z0-9\\-]+$"
     required: true
     title: "MDS WordPress Themes"
-    default: [ lodestar, twentysixteen ]
+    default: ["lodestar", "twentysixteen"]
     minItems: 1
     uniqueItems: true
     description: "Define WordPress Themes to be installed with wp-cli."
