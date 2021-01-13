@@ -85,7 +85,6 @@ wp_site_admin_pass = "<wp-admin_password>"
 # WordPress WP-Admin e-mail address
 wp_site_admin_email = "<wp-admin_email>"
 
-
 ````
 
 ### Create the Resources
@@ -97,13 +96,12 @@ Run the following commands:
 
 
 ### Testing your Deployment
-After the deployment is finished, you can test if your Wordpress CMS has been deployed correctly (access to configuration wizard). From outputes please pick up the value of the wordpress_public_ip:
+After the deployment is finished, you can access WP-Admin by picking wordpress_wp-admin_url output and pasting into web browser window. You can also verify initial content of your blog by using wordpress_public_ip:
 
 ````
+wordpress_wp-admin_url = http://193.122.198.19/wp-admin/
 wordpress_public_ip = 193.122.198.19
 `````
-
-Then copy it into Web browser. Here is the example of the succesfull outcome:
 
 ### Destroy the Deployment
 When you no longer need the deployment, you can run this command to destroy the resources:

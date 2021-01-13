@@ -18,15 +18,16 @@ variableGroups:
   - availablity_domain_name 
   - admin_password
   - wp_password
-  - wp_site_admin_user
   - wp_site_admin_pass
-  - wp_site_admin_email
-  - wp_plugins
-  - wp_themes
+
 
 - title: Optional Configuration
   visible: true
   variables:
+  - wp_site_admin_email
+  - wp_site_admin_user
+  - wp_plugins
+  - wp_themes
   - vcn
   - vcn_cidr
   - instance_os
