@@ -214,7 +214,7 @@ variables:
       type: string
       pattern: "^[a-zA-Z0-9\\-]+$"
     required: true
-    title: "MDS WordPress Plugins"
+    title: "WordPress Plugins"
     default: ["hello-dolly","elementor"]
     minItems: 1
     uniqueItems: true
@@ -226,7 +226,7 @@ variables:
       type: string
       pattern: "^[a-zA-Z0-9\\-]+$"
     required: true
-    title: "MDS WordPress Themes"
+    title: "WordPress Themes"
     default: ["lodestar", "twentysixteen"]
     minItems: 1
     uniqueItems: true

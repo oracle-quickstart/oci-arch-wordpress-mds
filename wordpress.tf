@@ -5,6 +5,7 @@ module "wordpress" {
   image_id              = lookup(data.oci_core_images.InstanceImageOCID.images[0], "id")
   shape                 = var.node_shape
   label_prefix          = var.label_prefix
+  display_name          = "wordpress"
   subnet_id             = oci_core_subnet.public.id
   ssh_authorized_keys   = tls_private_key.public_private_key_pair.public_key_openssh 
   ssh_private_key       = tls_private_key.public_private_key_pair.private_key_pem
