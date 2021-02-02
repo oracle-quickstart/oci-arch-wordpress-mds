@@ -69,14 +69,14 @@ variables:
   admin_password:
     type: password
     required: true
-    title: "MDS Admin User's Password"
+    title: "MySQL Admin User's Password"
     description: "Choose password for MySQL Database System admin user."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
   wp_password:
     type: password
     required: true
-    title: "MDS WordPress User's Password"
+    title: "MySQL WordPress User's Password"
     description: "Choose MySQL Password for WordPress User."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
