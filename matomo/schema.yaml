@@ -1,0 +1,290 @@
+title: "Deploy WordPress CMD on OCI with MDS"
+stackDescription: "Deploy WordPress CMS on OCI with MySQL Database Service"
+schemaVersion: 1.2.0
+version: "20201104"
+locale: "en"
+
+variableGroups:
+- title: General Configuration
+  visible: false
+  variables:
+  - tenancy_ocid
+  - region
+
+- title: Required Configuration
+  visible: true  
+  variables:
+  - compartment_ocid
+  - availablity_domain_name 
+  - admin_password
+  - wp_password
+  - wp_site_admin_pass
+
+
+- title: Optional Configuration
+  visible: true
+  variables:
+  - wp_site_admin_email
+  - wp_site_admin_user
+  - wp_plugins
+  - wp_themes
+  - vcn
+  - vcn_cidr
+  - instance_os
+  - linux_os_version
+  - label_prefix
+  - node_shape
+  - mysql_shape
+  - admin_username
+  - wp_name
+  - wp_schema
+  - wp_site_url
+  - wp_site_title
+
+variables:
+
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    visibile: true
+    title: "Compartment"
+    description: "Compartment where your WordPress and MDS will be deployed."
+
+  region:
+    type: oci:identity:region:name
+    required: true
+    visibile: true
+    title: "Region"
+    description: "Choose Region where your WordPress and MDS will be deployed."
+
+  availablity_domain_name:
+    type: oci:identity:availabilitydomain:name
+    required: true
+    visibile: true
+    title: "Availability Domain to be chosen"
+    description: "Choose Availability Domain where your WordPress and MDS will be deployed."
+    dependsOn:
+      regionName: ${region}
+      compartmentId: ${compartment_ocid}
+
+  admin_password:
+    type: password
+    required: true
+    title: "MDS Admin User's Password"
+    description: "Choose password for MySQL Database System admin user."
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
+  wp_password:
+    type: password
+    required: true
+    title: "MDS WordPress User's Password"
+    description: "Choose MySQL Password for WordPress User."
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
+  wp_site_title:
+    type: string
+    required: false
+    visible: true
+    title: "WordPress Site Title"
+    description: "Define WordPress Site Title"
+
+  wp_site_admin_user:
+    type: string
+    required: true
+    visible: true
+    default: "admin"
+    title: "WordPress Site Admin Username"
+    description: "Define WordPress Site Admin Username"
+
+  wp_site_admin_pass:
+    type: password
+    required: true
+    visible: true
+    title: "WordPress Site Admin Password"
+    description: "Define WordPress Site Admin Password"
+  
+  wp_site_admin_email:
+    type: string
+    visible: true
+    required: true
+    default: "admin@example.com"
+    title: "WordPress Site Admin Email"
+    description: "Define WordPress Site Admin E-mail"
+
+  vcn:
+    type: string
+    visible: false
+    required: true
+    title: "VCN name"
+    description: "Type VCN name where your WordPress and MDS will be deployed."
+
+  vcn_cidr:
+    type: string
+    visible: false
+    required: false
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    title: "VCN CIDR"
+    description: "Choose VCN CIDR for your WordPress and MDS deployments."
+
+  node_shape:
+    type: oci:core:instanceshape:name
+    required: false
+    title: "Wordpress node shape"
+    description: "Choose Instance Shape for WordPress host."
+    default: "VM.Standard2.1"
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  instance_os:
+    type: enum
+    required: false
+    visible: false
+    title: "Instance OS"
+    description: "An Operating System that determines the operating system for WordPress host."
+    default: "Oracle Linux"
+    enum:
+      - "Oracle Linux"
+
+  linux_os_version:
+    type: enum
+    required: false
+    visible: false
+    title: "Instance OS version"
+    description: "An Operating System version that determines the operating system version for WordPress host."
+    default: "7.8"
+    enum:
+      - "7.8"
+
+  mysql_shape:
+    type: enum
+    required: false
+    default: "VM.Standard.E2.1"
+    title: "MDS Shape"
+    description: "Choose MDS Shape for your WordPress and MDS deployments."
+    enum:
+      - "VM.Standard.E2.1"
+      - "VM.Standard.E2.2"
+      - "VM.Standard.E2.4"  
+      - "VM.Standard.E2.8"
+      - "MySQL.VM.Standard.E3.1.8GB"
+      - "MySQL.VM.Standard.E3.1.16GB"      
+      - "MySQL.VM.Standard.E3.2.32GB"
+      - "MySQL.VM.Standard.E3.4.64GB"
+      - "MySQL.VM.Standard.E3.8.128GB"
+      - "MySQL.VM.Standard.E3.16.256GB"
+      - "MySQL.VM.Standard.E3.24.384GB"
+      - "MySQL.VM.Standard.E3.32.512GB"
+      - "MySQL.VM.Standard.E3.48.768GB"    
+      - "MySQL.VM.Standard.E3.64.1024GB"        
+
+  label_prefix:
+    type: string
+    required: false
+    visible: false
+    title: "WordPress Hostname Prefix"
+    description: "Type WordPress Hostname Prefix."
+
+  admin_username:
+    type: string
+    required: false
+    title: "MDS Admin Username"
+    description: "Type MySQL Database Service's admin username."
+    minLength: 1
+    maxLength: 14
+    pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
+
+  wp_name:
+    type: string
+    required: false
+    title: "MDS WordPress Username"
+    description: "Type MySQL Username for WordPress."
+    minLength: 2
+    maxLength: 14
+    pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
+
+  wp_schema:
+    type: string
+    required: false
+    title: "MDS WordPress Schema"
+    description: "Type MySQL Schema/Database for WordPress."
+
+  wp_plugins:
+    type: array
+    items:
+      type: string
+      pattern: "^[a-zA-Z0-9\\-]+$"
+    required: true
+    title: "WordPress Plugins"
+    default: ["hello-dolly","elementor"]
+    minItems: 1
+    uniqueItems: true
+    description: "Define WordPress Plugins to be installed with wp-cli (minimum 1 plugin)."
+
+  wp_themes:
+    type: array
+    items:
+      type: string
+      pattern: "^[a-zA-Z0-9\\-]+$"
+    required: true
+    title: "WordPress Themes"
+    default: ["lodestar", "twentysixteen"]
+    minItems: 1
+    uniqueItems: true
+    description: "Define WordPress Themes to be installed with wp-cli (minimum 1 theme)."
+
+  wp_site_url:
+    type: string
+    required: false
+    title: "WordPress Site URL"
+    description: "Define WordPress Site URL"
+
+outputs:
+
+  generated_ssh_private_key:
+    title: "Generated SSH Private Key"
+    displayText: "Generated SSH Private Key"
+    type: copyableString
+    visible: true
+
+  wordpress_wp-admin_url:
+    title: "WordPress CMS WP-Admin URL"
+    displayText: "WordPress CMS WP-Admin URL"
+    type: string
+    visible: true
+
+  wordpress_wp-admin_user:
+    title: "WordPress CMS WP-Admin User"
+    displayText: "WordPress CMS WP-Admin User"
+    type: string
+    visible: true
+
+  wordpress_wp-admin_password:
+    title: "WordPress CMS WP-Admin Password"
+    displayText: "WordPress CMS WP-Admin Password"
+    type: string
+    visible: true
+
+  wordpress_public_ip:
+    title: "WordPress CMS Public IP"
+    displayText: "WordPress CMS Public IP"
+    type: string
+    visible: true
+
+  matomo_public_ip:
+    title: "Matomo Public IP"
+    displayText: "Matomo Public IP"
+    type: string
+    visible: true
+
+  matomo_url:
+    title: "Matomo URL"
+    displayText: "Matomo URL"
+    type: string
+    visible: true
+
+  mysql_instance_ip:
+    title: "MySQL instance private IP"
+    displayText: "MySQL instance private IP"
+    type: string
+    visible: true
+    
