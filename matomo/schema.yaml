@@ -1,5 +1,5 @@
-title: "Deploy WordPress CMD on OCI with MDS"
-stackDescription: "Deploy WordPress CMS on OCI with MySQL Database Service"
+title: "Deploy WordPress CMS VM, MySQL VM and Matomo VM on OCI"
+stackDescription: "Deploy WordPress CMS VM, MySQL VM and Matomo VM on OCI"
 schemaVersion: 1.2.0
 version: "20201104"
 locale: "en"
@@ -19,7 +19,6 @@ variableGroups:
   - admin_password
   - wp_password
   - wp_site_admin_pass
-
 
 - title: Optional Configuration
   visible: true
@@ -48,21 +47,21 @@ variables:
     required: true
     visibile: true
     title: "Compartment"
-    description: "Compartment where your WordPress and MDS will be deployed."
+    description: "Compartment where your WordPress and Matomo will be deployed."
 
   region:
     type: oci:identity:region:name
     required: true
     visibile: true
     title: "Region"
-    description: "Choose Region where your WordPress and MDS will be deployed."
+    description: "Choose Region where your WordPress and Matomo will be deployed."
 
   availablity_domain_name:
     type: oci:identity:availabilitydomain:name
     required: true
     visibile: true
     title: "Availability Domain to be chosen"
-    description: "Choose Availability Domain where your WordPress and MDS will be deployed."
+    description: "Choose Availability Domain where your WordPress and Matomo will be deployed."
     dependsOn:
       regionName: ${region}
       compartmentId: ${compartment_ocid}
@@ -116,7 +115,7 @@ variables:
     visible: false
     required: true
     title: "VCN name"
-    description: "Type VCN name where your WordPress and MDS will be deployed."
+    description: "Type VCN name where your WordPress and Matomo will be deployed."
 
   vcn_cidr:
     type: string
@@ -124,13 +123,13 @@ variables:
     required: false
     pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
     title: "VCN CIDR"
-    description: "Choose VCN CIDR for your WordPress and MDS deployments."
+    description: "Choose VCN CIDR for your WordPress and Matomo deployments."
 
   node_shape:
     type: oci:core:instanceshape:name
     required: false
-    title: "Wordpress node shape"
-    description: "Choose Instance Shape for WordPress host."
+    title: "Wordpress and Matomo compute shape"
+    description: "Choose Instance Shape for WordPress and Matomo compute instances."
     default: "VM.Standard2.1"
     dependsOn:
       compartmentId: ${compartment_ocid}
@@ -140,7 +139,7 @@ variables:
     required: false
     visible: false
     title: "Instance OS"
-    description: "An Operating System that determines the operating system for WordPress host."
+    description: "An Operating System that determines the operating system for WordPress and Matomo hosts."
     default: "Oracle Linux"
     enum:
       - "Oracle Linux"
@@ -150,33 +149,20 @@ variables:
     required: false
     visible: false
     title: "Instance OS version"
-    description: "An Operating System version that determines the operating system version for WordPress host."
+    description: "An Operating System version that determines the operating system version for WordPress and Matomo hosts."
     default: "7.8"
     enum:
       - "7.8"
 
   mysql_shape:
-    type: enum
+    type: oci:core:instanceshape:name
     required: false
     default: "VM.Standard.E2.1"
-    title: "MDS Shape"
-    description: "Choose MDS Shape for your WordPress and MDS deployments."
-    enum:
-      - "VM.Standard.E2.1"
-      - "VM.Standard.E2.2"
-      - "VM.Standard.E2.4"  
-      - "VM.Standard.E2.8"
-      - "MySQL.VM.Standard.E3.1.8GB"
-      - "MySQL.VM.Standard.E3.1.16GB"      
-      - "MySQL.VM.Standard.E3.2.32GB"
-      - "MySQL.VM.Standard.E3.4.64GB"
-      - "MySQL.VM.Standard.E3.8.128GB"
-      - "MySQL.VM.Standard.E3.16.256GB"
-      - "MySQL.VM.Standard.E3.24.384GB"
-      - "MySQL.VM.Standard.E3.32.512GB"
-      - "MySQL.VM.Standard.E3.48.768GB"    
-      - "MySQL.VM.Standard.E3.64.1024GB"        
-
+    title: "MySQL Compute VM Shape"
+    description: "Choose MySQL Compute VM for your WordPress CMS and Matomo deployments."
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+    
   label_prefix:
     type: string
     required: false
@@ -187,8 +173,8 @@ variables:
   admin_username:
     type: string
     required: false
-    title: "MDS Admin Username"
-    description: "Type MySQL Database Service's admin username."
+    title: "MySQL Admin Username"
+    description: "Type MySQL Database admin username."
     minLength: 1
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
@@ -196,7 +182,7 @@ variables:
   wp_name:
     type: string
     required: false
-    title: "MDS WordPress Username"
+    title: "MySQL WordPress Username"
     description: "Type MySQL Username for WordPress."
     minLength: 2
     maxLength: 14
@@ -205,7 +191,7 @@ variables:
   wp_schema:
     type: string
     required: false
-    title: "MDS WordPress Schema"
+    title: "MySQL WordPress Schema"
     description: "Type MySQL Schema/Database for WordPress."
 
   wp_plugins:
