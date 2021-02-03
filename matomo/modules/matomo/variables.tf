@@ -37,3 +37,36 @@ variable "image_id" {
   default     = ""
 }
 
+variable "matomo_username" {
+  description = "Matomo Database User Name."
+}
+
+variable "matomo_password" {
+  description = "Matomo Database User Password."
+}
+
+variable "matomo_schema" {
+  description = "Matomo MySQL Schema"
+}
+
+variable "admin_username" {
+    description = "Username of the MySQL admin account"
+}
+
+variable "admin_password" {
+    description = "Password for the admin user for MySQL"
+}
+
+variable "mysql_compute_ip" {
+    description = "Private IP of the MySQL Compute Instance"
+}
+
+variable "vm_user" {
+  description = "The SSH user to connect to the master host."
+  default     = "opc"
+}
+
+variable "mysql_version" {
+  description = "The version of the Mysql Shell."
+  default     = "8.0.21"
+}

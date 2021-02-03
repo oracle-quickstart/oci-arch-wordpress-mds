@@ -95,3 +95,17 @@ variable "wp_site_admin_email" {
   description = "WordPress Site Admin Email"
   default = "admin@example.com"  
 } 
+
+variable "matomo_username" {
+  description = "Matomo Database User Name."
+  default = "matomo"
+}
+
+variable "matomo_password" {
+  description = "Matomo Database User Password."
+}
+
+variable "matomo_schema" {
+  description = "Matomo MySQL Schema"
+  default = "matomo"
+}

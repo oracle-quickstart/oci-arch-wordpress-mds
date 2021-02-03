@@ -1,5 +1,16 @@
 data "template_file" "install_matomo" {
   template = file("${path.module}/scripts/install_matomo.sh")
+
+  vars = {
+    admin_password   = var.admin_password
+    admin_username   = var.admin_username
+    matomo_username  = var.matomo_username
+    matomo_password  = var.matomo_password
+    matomo_schema    = var.matomo_schema
+    mysql_compute_ip = var.mysql_compute_ip
+    mysql_version    = var.mysql_version
+    user             = var.vm_user
+  }
 }
 
 resource "oci_core_instance" "MatomoInstance" {

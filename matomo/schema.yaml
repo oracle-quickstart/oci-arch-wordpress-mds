@@ -19,6 +19,7 @@ variableGroups:
   - admin_password
   - wp_password
   - wp_site_admin_pass
+  - matomo_password
 
 - title: Optional Configuration
   visible: true
@@ -39,6 +40,8 @@ variableGroups:
   - wp_schema
   - wp_site_url
   - wp_site_title
+  - matomo_username
+  - matomo_schema
 
 variables:
 
@@ -80,6 +83,13 @@ variables:
     description: "Choose MySQL Password for WordPress User."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
+  matomo_password:
+    type: password
+    required: true
+    title: "MySQL Matomo User's Password"
+    description: "Choose MySQL Password for Matomo User."
+    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+
   wp_site_title:
     type: string
     required: false
@@ -109,6 +119,22 @@ variables:
     default: "admin@example.com"
     title: "WordPress Site Admin Email"
     description: "Define WordPress Site Admin E-mail"
+
+  matomo_username:
+    type: string
+    visible: true
+    required: true
+    default: "matomo"
+    title: "Matomo Username"
+    description: "Define Matomo Username"
+
+  matomo_schema:
+    type: string
+    visible: true
+    required: true
+    default: "matomo"
+    title: "MySQL Matomo Schema"
+    description: "Define MySQL Matomo Schema"
 
   vcn:
     type: string
@@ -265,6 +291,24 @@ outputs:
   matomo_url:
     title: "Matomo URL"
     displayText: "Matomo URL"
+    type: string
+    visible: true
+
+  matomo_username:
+    title: "Matomo MySQL Database Username"
+    displayText: "Matomo MySQL Database Username"
+    type: string
+    visible: true
+
+  matomo_password:
+    title: "Matomo MySQL Database User Password"
+    displayText: "Matomo MySQL Database User Password"
+    type: string
+    visible: true
+
+  matomo_schema:
+    title: "Matomo MySQL Database (Schema)"
+    displayText: "Matomo MySQL Database (Schema)"
     type: string
     visible: true
 

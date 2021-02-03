@@ -103,12 +103,35 @@ wordpress_wp-admin_url = http://193.122.198.19/wp-admin/
 wordpress_public_ip = 193.122.198.19
 `````
 
-You should also finish Matomo configuration by going to matomo_url from output:
+You should also finish Matomo configuration by going to matomo_url from output and using mysql related outputs (mysql_instance_public_ip, matomo_username, matomo_password, matomo_schema):
 
 ````
-matomo_url = "http://193.122.202.127/analytics/matomo/"
-matomo_public_ip = "193.122.202.127"
+matomo_url = "http://193.122.131.150/analytics/matomo/"
+mysql_instance_ip = "10.0.1.2"
+matomo_username = "matomo"
+matomo_password = "***********"
+matomo_schema = "matomo"
 `````
+
+![](./images/matomo_wizard1.png)
+
+![](./images/matomo_wizard2.png)
+
+![](./images/matomo_wizard3.png)
+
+![](./images/matomo_wizard4.png)
+
+![](./images/matomo_wizard5.png)
+
+![](./images/matomo_wizard6.png)
+
+![](./images/matomo_wizard7.png)
+
+![](./images/matomo_wizard8.png)
+
+![](./images/matomo_wizard9.png)
+
+![](./images/matomo_wizard10.png)
 
 
 ### Destroy the Deployment

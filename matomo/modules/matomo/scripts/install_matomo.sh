@@ -48,6 +48,22 @@ chown -R apache:apache /var/www/html/analytics/matomo/tmp/templates_c/
 find /var/www/html/analytics/matomo/tmp/templates_c/ -type f -exec chmod 755 {} \;
 find /var/www/html/analytics/matomo/tmp/templates_c/ -type d -exec chmod 777 {} \;
 
+# Install MySQL Community Edition 8.0
+rpm -ivh https://dev.mysql.com/get/mysql80-community-release-$(uname -r | sed 's/^.*\(el[0-9]\+\).*$/\1/')-1.noarch.rpm
+yum install -y mysql-shell-${mysql_version} 
+mkdir ~${user}/.mysqlsh
+cp /usr/share/mysqlsh/prompt/prompt_256pl+aw.json ~${user}/.mysqlsh/prompt.json
+echo '{
+    "history.autoSave": "true",
+    "history.maxSize": "5000"
+}' > ~${user}/.mysqlsh/options.json
+chown -R ${user} ~${user}/.mysqlsh
+
+# Setup MySQL database for Matomo
+mysqlsh --user ${admin_username} --password=${admin_password} --host ${mysql_compute_ip} --sql -e "CREATE DATABASE ${matomo_schema};"
+mysqlsh --user ${admin_username} --password=${admin_password} --host ${mysql_compute_ip} --sql -e "CREATE USER ${matomo_username} identified by '${matomo_password}';"
+mysqlsh --user ${admin_username} --password=${admin_password} --host ${mysql_compute_ip} --sql -e "GRANT ALL PRIVILEGES ON ${matomo_schema}.* TO ${matomo_username};"
+
 # Disabling SELinux
 sed -i.bak 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 setenforce 0
