@@ -21,4 +21,5 @@ module "wordpress" {
   wp_site_admin_user    = var.wp_site_admin_user
   wp_site_admin_pass    = var.wp_site_admin_pass
   wp_site_admin_email   = var.wp_site_admin_email
+  defined_tags          = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }

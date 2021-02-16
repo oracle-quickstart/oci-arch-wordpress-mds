@@ -6,6 +6,11 @@ variable "private_key_path" {}
 variable "user_ocid" {}
 variable "availablity_domain_name" {}
 
+variable "release" {
+  description = "Reference Architecture Release (OCI Architecture Center)"
+  default     = "1.0"
+}
+
 variable "vcn" {
   default = "wpmdsvcn"
 }

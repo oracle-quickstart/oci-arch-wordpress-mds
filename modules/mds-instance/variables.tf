@@ -38,3 +38,8 @@ variable "configuration_id" {
 variable "mysql_data_storage_in_gb" {
     default = 50
 }
+
+variable "defined_tags" {
+  description = "Defined tags for MDS Instance."
+  default     = ""
+}

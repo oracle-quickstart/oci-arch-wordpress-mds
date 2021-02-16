@@ -40,6 +40,7 @@ variableGroups:
   - wp_schema
   - wp_site_url
   - wp_site_title
+  - release
 
 variables:
 
@@ -237,6 +238,12 @@ variables:
     required: false
     title: "WordPress Site URL"
     description: "Define WordPress Site URL"
+
+  release:
+    type: string
+    required: false
+    visible: false
+    title: "Reference Architecture Release (OCI Architecture Center)"
 
 outputs:
 

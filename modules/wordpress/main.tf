@@ -59,6 +59,8 @@ resource "oci_core_instance" "WordPress" {
     source_id   = var.image_id
     source_type = "image"
   }
+
+  defined_tags = var.defined_tags
 }
 
 data "oci_core_vnic_attachments" "WordPress_vnics" {
@@ -80,6 +82,7 @@ resource "oci_core_public_ip" "WordPress_public_ip" {
   display_name   = "WordPress_public_ip"
   lifetime       = "RESERVED"
   private_ip_id  = data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"]
+  defined_tags   = var.defined_tags
 }
 
 data "template_file" "setup_wp" {
