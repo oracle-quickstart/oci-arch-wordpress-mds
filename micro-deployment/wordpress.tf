@@ -1,4 +1,6 @@
-
+# Copyright (c) 2021 Oracle and/or its affiliates. All rights reserved.
+# Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+# 
 data "template_file" "wordpress-docker-compose" {
   template = file("${path.module}/scripts/wordpress.yaml")
 
