@@ -1,4 +1,4 @@
-name: 'simple-orm-stack'
+name: 'Build Stack'
 
 on:
   push:
