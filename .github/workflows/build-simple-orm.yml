@@ -31,7 +31,7 @@ jobs:
         run: terraform validate
 
       - name: 'Build Stack'
-        run: zip -r wordpress-micro-deployment.zip *.tf *.yaml script
+        run: zip -r wordpress-micro-deployment.zip *.tf *.yaml scripts
       
      
       # - name: Create Release
