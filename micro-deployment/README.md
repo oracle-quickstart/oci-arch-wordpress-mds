@@ -1,15 +1,15 @@
 # oci-wordpress-micro
 
-## Prerequisites
-
-- Permission to `manage` the following types of resources in your Oracle Cloud Infrastructure tenancy: `vcns`, `internet-gateways`, `route-tables`, `security-lists`, `subnets` and `instances`.
-
-- Quota to create the following resources: 1 VCN, 1 subnet, 1 Internet Gateway, and 1 compute instance (Wordpress CMS).
-
-If you don't have the required permissions and quota, contact your tenancy administrator. See [Policy Reference](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Reference/policyreference.htm), [Service Limits](https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/servicelimits.htm), [Compartment Quotas](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcequotas.htm).
+This repository provides a minimal WordPress deployment on Oracle Cloud Infrastructure. This deployment utilizes a single compute instance in order to deploy both WordPress as well as a MySQL database.
+Both WordPress as well as MySQL are deployed using Docker containers. There are two ways to deploy this solution. The first method utilizes Oracle Resource Manager, a managed Terraform service in Oracle Cloud Infrastructure. Secondly, this solution can be deployed using terraform.
 
 ## Deploy Using Oracle Resource Manager
 
+To deploy this solution using Oracle Resource Manager, click on the deployment button below to start the deployment in your oracle cloud infrastructure tenancy.
+
+Alternatively, you can download the stack for this solution from the **Releases** a section of this repository. Navigate to Oracle resource manager in the Oracle Cloud Infrastructure console. Here import the zip file as a new resource manager stack.You can now perform terraform actions like plan or apply.
+
+The stack exposes several variables that can be configured. By default the stack only prompts the user for the administrative password for WordPress. Users can choose to use the advanced options to provide further configuration of the stack.
 
 ## Deploy Using the Terraform CLI
 
@@ -19,7 +19,7 @@ Now, you'll want a local copy of this repo. You can make that with the commands:
 
 ```
     git clone https://github.com/oracle-quickstart/oci-arch-wordpress-mds.git
-    cd oci-arch-wordpress-mds
+    cd oci-arch-wordpress-mds/micro-deployment
     ls
 ```
 
@@ -41,8 +41,14 @@ region = "<oci_region>"
 # Availablity Domain 
 availablity_domain_name = "<availablity_domain_name>"
 
-````
+```
 
+You also need to uncomment the following lines in the `provider.tf`.
+```
+   user_ocid = var.user_ocid
+   fingerprint = var.fingerprint
+   private_key_path = var.private_key_path
+```
 ### Create the Resources
 Run the following commands:
 
@@ -63,9 +69,3 @@ wordpress_public_ip = 193.122.198.19
 When you no longer need the deployment, you can run this command to destroy the resources:
 
     terraform destroy
-
-## Architecture Diagram
-
-![](./images/architecture-deploy-wordpress-mds.png)
-
-
