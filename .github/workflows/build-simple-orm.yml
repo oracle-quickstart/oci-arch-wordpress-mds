@@ -1,6 +1,12 @@
 name: 'simple-orm-stack'
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - feature/containerized-wordpress
+  pull_request:
+    branches:
+      - master
 env:
   PROJECT_WORKING_DIR: '/build-orm/'
 
