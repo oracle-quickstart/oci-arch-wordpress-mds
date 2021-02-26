@@ -7,6 +7,8 @@ Both WordPress as well as MySQL are deployed using Docker containers. There are 
 
 To deploy this solution using Oracle Resource Manager, click on the deployment button below to start the deployment in your oracle cloud infrastructure tenancy.
 
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-arch-wordpress-mds/releases/latest/download/oci-wordpress-micro-stack-latest.zip)
+
 Alternatively, you can download the stack for this solution from the **Releases** a section of this repository. Navigate to Oracle resource manager in the Oracle Cloud Infrastructure console. Here import the zip file as a new resource manager stack.You can now perform terraform actions like plan or apply.
 
 The stack exposes several variables that can be configured. By default the stack only prompts the user for the administrative password for WordPress. Users can choose to use the advanced options to provide further configuration of the stack.
