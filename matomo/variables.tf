@@ -30,7 +30,7 @@ variable "instance_os" {
 
 variable "linux_os_version" {
   description = "Operating system version for all Linux instances"
-  default     = "7.8"
+  default     = "8"
 }
 
 variable "admin_password" {
@@ -46,14 +46,17 @@ variable "mysql_shape" {
     default = "VM.Standard.E2.1"
 }
 
+variable "mysql_version" {
+  default     = "8.0.23"
+}
+
 variable "wp_name" {
   description = "WordPress Database User Name."
   default     = "wp"  
 }
 
 variable "wp_password" {
-  description = "WordPress Database User Password."
-#  default     = "MyWPpassw0rd!"  
+  description = "WordPress Database User Password." 
 }
 
 variable "wp_schema" {
@@ -62,13 +65,15 @@ variable "wp_schema" {
 }
 
 variable "wp_plugins" {
-  description = "WordPress Plugins"
-  default     = "hello-dolly,elementor,wp-piwik"
+  type        = list(string)
+  description = "A list of WordPress plugins to install."
+  default     = ["hello-dolly"]
 }
 
 variable "wp_themes" {
+  type        = list(string)
   description = "A list of WordPress themes to install."
-  default     = "lodestar,twentysixteen"
+  default     = ["lodestar","twentysixteen"]
 }
 
 variable "wp_site_url" {

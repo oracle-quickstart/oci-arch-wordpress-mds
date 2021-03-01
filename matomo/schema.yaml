@@ -35,6 +35,7 @@ variableGroups:
   - label_prefix
   - node_shape
   - mysql_shape
+  - mysql_version
   - admin_username
   - wp_name
   - wp_schema
@@ -176,9 +177,11 @@ variables:
     visible: false
     title: "Instance OS version"
     description: "An Operating System version that determines the operating system version for WordPress and Matomo hosts."
-    default: "7.8"
+    default: "8"
     enum:
       - "7.8"
+      - "7.9"
+      - "8"
 
   mysql_shape:
     type: oci:core:instanceshape:name
@@ -188,7 +191,16 @@ variables:
     description: "Choose MySQL Compute VM for your WordPress CMS and Matomo deployments."
     dependsOn:
       compartmentId: ${compartment_ocid}
-    
+  
+  mysql_version:
+    type: enum
+    required: false
+    default: "8.0.23"
+    title: "MySQL Version"
+    description: "Choose MySQL version."
+    enum:
+      - "8.0.23"
+
   label_prefix:
     type: string
     required: false
