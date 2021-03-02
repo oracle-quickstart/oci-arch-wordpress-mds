@@ -95,8 +95,8 @@ data "template_file" "setup_wp" {
     wp_site_admin_user  = var.wp_site_admin_user
     wp_site_admin_pass  = var.wp_site_admin_pass
     wp_site_admin_email = var.wp_site_admin_email
-    wp_plugins          = join(" ", var.wp_plugins)
-    wp_themes           = join(" ", var.wp_themes)
+    wp_plugins          = join(" ", split(",", var.wp_plugins))
+    wp_themes           = join(" ", split(",", var.wp_themes))
   }  
 }
 
