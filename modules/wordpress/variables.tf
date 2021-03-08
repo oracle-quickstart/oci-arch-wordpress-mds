@@ -112,3 +112,8 @@ variable "wp_site_admin_email" {
   description = "WordPress Site Admin Email"
   default = "admin@example.com"  
 } 
+
+variable "defined_tags" {
+  description = "Defined tags for WordPress host."
+  default     = ""
+}

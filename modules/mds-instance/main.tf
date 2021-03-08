@@ -8,4 +8,5 @@ resource "oci_mysql_mysql_db_system" "MDSinstance" {
     subnet_id = var.subnet_id
     data_storage_size_in_gb = var.mysql_data_storage_in_gb
     display_name = var.display_name
+    defined_tags = var.defined_tags
 }
