@@ -39,8 +39,14 @@ services:
         until wp core install --path="/var/www/html" --url="http://${wp_site_url}" --title="WordPress on OCI" --admin_user=${wp_admin_user} --admin_password=${wp_admin_password} --admin_email=foo@bar.com; do
           echo "WordPress not ready, retrying in 10 seconds..."
           sleep 10;
-        done      
+        done    
+        echo "WordPress initialized..."  
       '
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${wp_db_user}
+      WORDPRESS_DB_PASSWORD: ${wp_db_password}
+      WORDPRESS_DB_NAME: ${wp_schema}
     # vstm: add shared volume
     volumes:
       - wp_data:/var/www/html
