@@ -16,9 +16,6 @@ users:
 packages:
  - docker-engine
  - docker-compose
- - certbot
- - certbot-nginx
- - certbot-apache
 
 runcmd:
   - [ systemctl, daemon-reload ]
