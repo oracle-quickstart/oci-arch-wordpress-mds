@@ -13,6 +13,8 @@ variableGroups:
   variables:
   - tenancy_ocid
   - region
+  - instance_os
+  - linux_os_version
 
 - title: WordPress Configuration
   visible: true  
@@ -26,9 +28,7 @@ variableGroups:
       and:
         - show_advanced  
   variables:
-    - mysql_root_password
     - wp_db_user
-    - wp_db_password
     - wp_schema
 
 
@@ -40,9 +40,9 @@ variableGroups:
   variables:
     - compartment_ocid
     - availability_domain_name 
-    - node_shape
-    - instance_os
-    - linux_os_version
+    - instance_shape
+    - instance_ocpus
+    - instance_shape_config_memory_in_gbs
     - generate_public_ssh_key
     - public_ssh_key
 
@@ -91,15 +91,6 @@ variables:
     default: false
 
 # MySQL
-  mysql_root_password:
-    type: password
-    required: false
-    visible: 
-      and:
-        - show_advanced
-    title: "MySQL admin password"
-    description: "Choose the password that will be set for the MySQL root superuser account."
-    pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
   wp_db_user:
     type: string
@@ -109,16 +100,6 @@ variables:
     minLength: 2
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
-    visible: 
-      and:
-        - show_advanced
-
-  wp_db_password:
-    type: password
-    required: false
-    title: "WordPress database password"
-    description: "Password for WordPress to connect to the MySQL database."
-    #pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
     visible: 
       and:
         - show_advanced
@@ -191,7 +172,7 @@ variables:
       regionName: ${region}
       compartmentId: ${compartment_ocid}
 
-  node_shape:
+  instance_shape:
     type: oci:core:instanceshape:name
     required: false
     visible: 
@@ -199,9 +180,43 @@ variables:
         - show_advanced
     title: "Wordpress node shape"
     description: "Choose Instance Shape for WordPress host."
-    default: "VM.Standard2.1"
+    default: "VM.Standard.E3.Flex"
     dependsOn:
       compartmentId: ${compartment_ocid}
+  
+  instance_ocpus:
+    type: integer
+    minimum: 1
+    maximum: 64
+    title: "Number of OCPUs"
+    description: "You can customize the number of OCPUs to a flexible shape."
+    visible:
+      and:
+        - show_advanced
+        - or:
+          - eq:
+            - instance_shape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - instance_shape 
+            - "VM.Standard.E4.Flex"
+
+  instance_shape_config_memory_in_gbs:
+    type: integer
+    minimum: 1
+    maximum: 1024
+    title: "Amount of memory (GB)"
+    description: "You can customize the amount of memory allocated to a flexible shape."
+    visible:
+      and:
+        - show_advanced
+        - or:
+          - eq:
+            - instance_shape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - instance_shape 
+            - "VM.Standard.E4.Flex"
 
   instance_os:
     type: enum
