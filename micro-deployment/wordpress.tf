@@ -6,13 +6,13 @@ data "template_file" "wordpress-docker-compose" {
 
   vars = {
     public_key_openssh  = tls_private_key.public_private_key_pair.public_key_openssh,
-    mysql_root_password = var.mysql_root_password,
+    mysql_root_password = random_password.mysql_root_password.result,
     wp_schema           = var.wp_schema,
     wp_db_user          = var.wp_db_user,
-    wp_db_password      = var.wp_db_password,
+    wp_db_password      = random_password.wp_db_password.result,
     wp_site_url         = oci_core_public_ip.WordPress_public_ip.ip_address,
-    wp_admin_user          = var.wp_admin_user,
-    wp_admin_password      = var.wp_admin_password
+    wp_admin_user       = var.wp_admin_user,
+    wp_admin_password   = var.wp_admin_password
   }
 }
 
@@ -99,7 +99,17 @@ resource "null_resource" "WordPress_provisioner" {
   }
 }
 
+resource "random_password" "mysql_root_password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
 
+resource "random_password" "wp_db_password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
 
 locals {
   availability_domain_name = var.availability_domain_name != null ? var.availability_domain_name : data.oci_identity_availability_domains.ADs.availability_domains[0].name

@@ -52,20 +52,9 @@ variable "public_ssh_key" {
 
 # MySQL
 
-variable "mysql_root_password" {
-  description = "specifies the password that will be set for the MySQL root superuser account."
-  default     = "MySQLPassw0rd!"
-}
-
-
 variable "wp_db_user" {
   description = "The username that WordPress uses to connect to the MySQL database."
   default     = "wp"  
-}
-
-variable "wp_db_password" {
-  description = "Password for WordPress to connect to the MySQL database."
-  default     = "MyWPpassw0rd!"  
 }
 
 variable "wp_schema" {
@@ -83,5 +72,4 @@ variable "wp_admin_user" {
 
 variable "wp_admin_password" {
   description = "Password for the WordPress administrator."
-  #default     = "MyWPpassw0rd!"  
 }
