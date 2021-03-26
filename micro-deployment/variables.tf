@@ -25,8 +25,14 @@ variable "vcn_cidr" {
 
 ## Instance
 
-variable "node_shape" {
-  default     = "VM.Standard.E2.1"
+variable "instance_shape" {
+  default = "VM.Standard.E3.Flex"
+}
+variable "instance_ocpus" {
+  default = 1
+}
+variable "instance_shape_config_memory_in_gbs" {
+  default = 16
 }
 
 variable "label_prefix" {

@@ -21,7 +21,15 @@ resource "oci_core_instance" "WordPress" {
   availability_domain = local.availability_domain_name
   compartment_id      = var.compartment_ocid
   display_name        = "wordpress"
-  shape               = var.node_shape
+  shape               = local.instance_shape
+
+  dynamic "shape_config" {
+    for_each = local.is_flexible_instance_shape ? [1] : []
+    content {
+      ocpus         = var.instance_ocpus
+      memory_in_gbs = var.instance_shape_config_memory_in_gbs
+    }
+  }
 
   create_vnic_details {
     subnet_id        = oci_core_subnet.public.id
@@ -36,7 +44,7 @@ resource "oci_core_instance" "WordPress" {
 
   metadata = {
     ssh_authorized_keys = var.generate_public_ssh_key ? tls_private_key.public_private_key_pair.public_key_openssh : var.public_ssh_key
-    user_data           = base64encode(templatefile("./scripts/setup-docker.yaml",{}))
+    user_data           = base64encode(templatefile("./scripts/setup-docker.yaml", {}))
   }
 
 }
@@ -112,5 +120,8 @@ resource "random_password" "wp_db_password" {
 }
 
 locals {
-  availability_domain_name = var.availability_domain_name != null ? var.availability_domain_name : data.oci_identity_availability_domains.ADs.availability_domains[0].name
+  availability_domain_name   = var.availability_domain_name != null ? var.availability_domain_name : data.oci_identity_availability_domains.ADs.availability_domains[0].name
+  instance_shape             = var.instance_shape
+  compute_flexible_shapes    = ["VM.Standard.E3.Flex","VM.Standard.E4.Flex"]
+  is_flexible_instance_shape = contains(local.compute_flexible_shapes, local.instance_shape)
 }
