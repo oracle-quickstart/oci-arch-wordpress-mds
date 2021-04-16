@@ -10,6 +10,7 @@ variableGroups:
   variables:
   - tenancy_ocid
   - region
+  - release
 
 - title: Required Configuration
   visible: true  
@@ -19,30 +20,61 @@ variableGroups:
   - admin_password
   - wp_password
   - wp_site_admin_pass
+  - show_advanced
 
+- title: Network Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - vcn
+  - vcn_cidr
 
-- title: Optional Configuration
-  visible: true
+- title: Compute Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - ssh_public_key
+  - instance_os
+  - linux_os_version
+  - label_prefix
+  - node_shape
+  - node_flex_shape_ocpus
+  - node_flex_shape_memory
+
+- title: WordPress Optional Configuration
+  visible: 
+      and:
+        - show_advanced
   variables:
   - wp_site_admin_email
   - wp_site_admin_user
   - wp_plugins
   - wp_themes
-  - vcn
-  - vcn_cidr
-  - instance_os
-  - linux_os_version
-  - label_prefix
-  - node_shape
-  - mysql_shape
-  - admin_username
   - wp_name
   - wp_schema
   - wp_site_url
   - wp_site_title
-  - release
+
+- title: MDS Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - mysql_shape
+  - admin_username
+  - mysql_is_highly_available
+
 
 variables:
+
+  show_advanced:
+    type: boolean
+    title: "Show advanced options?"
+    description: "Shows advanced options."
+    visible: true
+    default: false
 
   compartment_ocid:
     type: oci:identity:compartment:id
@@ -71,15 +103,15 @@ variables:
   admin_password:
     type: password
     required: true
-    title: "MDS Admin User's Password"
+    title: "MySQL Database System Admin User's Password"
     description: "Choose password for MySQL Database System admin user."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
   wp_password:
     type: password
     required: true
-    title: "MDS WordPress User's Password"
-    description: "Choose MySQL Password for WordPress User."
+    title: "MySQL Database System WordPress User's Password"
+    description: "Choose MySQL Database System Password for WordPress User."
     pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
 
   wp_site_title:
@@ -132,9 +164,15 @@ variables:
     required: false
     title: "Wordpress node shape"
     description: "Choose Instance Shape for WordPress host."
-    default: "VM.Standard2.1"
+    default: "VM.Standard.E3.Flex"
     dependsOn:
       compartmentId: ${compartment_ocid}
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    title: "Public SSH Key"
+    description: "Choose public SSH Key to be uploaded into compute instances."
+    required: false
 
   instance_os:
     type: enum
@@ -146,22 +184,60 @@ variables:
     enum:
       - "Oracle Linux"
 
+  node_flex_shape_ocpus:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 1
+    title: "Flex Shape OCPUs"
+    description: "Choose number of OCPUs for Flex Shape."
+    visible:
+      and:
+        - or:
+          - eq:
+            - node_shape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Standard.E4.Flex"
+
+  node_flex_shape_memory:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 10
+    title: "Flex Shape Memory (GB)"
+    description: "Choose number GB for Flex Shape Memory."
+    visible:
+      and:
+        - or:
+          - eq:
+            - node_shape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Standard.E4.Flex"
+
   linux_os_version:
     type: enum
     required: false
     visible: false
     title: "Instance OS version"
     description: "An Operating System version that determines the operating system version for WordPress host."
-    default: "7.8"
+    default: "8"
     enum:
-      - "7.8"
+      - "8"
 
   mysql_shape:
     type: enum
     required: false
-    default: "VM.Standard.E2.1"
-    title: "MDS Shape"
-    description: "Choose MDS Shape for your WordPress and MDS deployments."
+    default: "MySQL.VM.Standard.E3.1.8GB"
+    title: "MySQL Database System Shape"
+    description: "Choose MySQL Database System Shape for your MDS deployments."
     enum:
       - "VM.Standard.E2.1"
       - "VM.Standard.E2.2"
@@ -176,7 +252,15 @@ variables:
       - "MySQL.VM.Standard.E3.24.384GB"
       - "MySQL.VM.Standard.E3.32.512GB"
       - "MySQL.VM.Standard.E3.48.768GB"    
-      - "MySQL.VM.Standard.E3.64.1024GB"        
+      - "MySQL.VM.Standard.E3.64.1024GB"  
+      - "MySQL.HeatWave.VM.Standard.E3"   
+
+  mysql_is_highly_available:
+    type: boolean
+    title: "MySQL Database System in HA?"
+    description: "Choose if MySQL Database System should be highly available."
+    visible: true
+    default: false
 
   label_prefix:
     type: string
@@ -188,7 +272,7 @@ variables:
   admin_username:
     type: string
     required: false
-    title: "MDS Admin Username"
+    title: "MySQL Admin Username"
     description: "Type MySQL Database Service's admin username."
     minLength: 1
     maxLength: 14
@@ -197,7 +281,7 @@ variables:
   wp_name:
     type: string
     required: false
-    title: "MDS WordPress Username"
+    title: "MySQL WordPress Username"
     description: "Type MySQL Username for WordPress."
     minLength: 2
     maxLength: 14
@@ -206,7 +290,7 @@ variables:
   wp_schema:
     type: string
     required: false
-    title: "MDS WordPress Schema"
+    title: "MySQL WordPress Schema"
     description: "Type MySQL Schema/Database for WordPress."
 
   wp_plugins:
@@ -246,12 +330,6 @@ variables:
     title: "Reference Architecture Release (OCI Architecture Center)"
 
 outputs:
-
-  generated_ssh_private_key:
-    title: "Generated SSH Private Key"
-    displayText: "Generated SSH Private Key"
-    type: copyableString
-    visible: true
 
   wordpress_wp-admin_url:
     title: "WordPress CMS WP-Admin URL"

@@ -1,3 +1,6 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 data "template_file" "install_mysql" {
   template = file("${path.module}/scripts/install_mysql.sh")
 
@@ -11,7 +14,16 @@ data "template_file" "install_mysql" {
 resource "oci_core_instance" "MySQLinstance" {
   availability_domain = var.availablity_domain_name
   compartment_id      = var.compartment_ocid
-  shape               = var.mysql_shape
+  shape               = var.node_shape
+
+  dynamic "shape_config" {
+    for_each = local.is_flexible_node_shape ? [1] : []
+    content {
+      memory_in_gbs = var.node_flex_shape_memory
+      ocpus = var.node_flex_shape_ocpus
+    }
+  }
+
   display_name        = "MySQLInstance"
 
   create_vnic_details {
@@ -21,17 +33,20 @@ resource "oci_core_instance" "MySQLinstance" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh 
+    ssh_authorized_keys = var.ssh_public_key
+    user_data = data.template_cloudinit_config.cloud_init.rendered
   }
 
   source_details {
-    source_id   = lookup(data.oci_core_images.InstanceImageOCID.images[0], "id")
+    source_id   = lookup(data.oci_core_images.InstanceImageOCID.images[0], "id")   
     source_type = "image"
   }
 
   #provisioner "local-exec" {
   #  command = "sleep 120"
   #}
+
+  defined_tags         = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 
 data "oci_core_vnic_attachments" "MySQLinstance_vnics" {

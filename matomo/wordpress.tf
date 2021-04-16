@@ -1,3 +1,6 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 ## DATASOURCE
 # Init Script Files
 data "template_file" "install_php" {
@@ -44,6 +47,14 @@ resource "oci_core_instance" "WordPress" {
   display_name        = "WordPress"
   shape               = var.node_shape
 
+  dynamic "shape_config" {
+    for_each = local.is_flexible_node_shape ? [1] : []
+    content {
+      memory_in_gbs = var.node_flex_shape_memory
+      ocpus = var.node_flex_shape_ocpus
+    }
+  }
+
   create_vnic_details {
     subnet_id        = oci_core_subnet.public.id
     display_name     = "WordPress"
@@ -52,13 +63,16 @@ resource "oci_core_instance" "WordPress" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh 
+    ssh_authorized_keys = var.ssh_public_key
+    user_data = data.template_cloudinit_config.cloud_init.rendered
   }
 
   source_details {
     source_id   = lookup(data.oci_core_images.InstanceImageOCID.images[0], "id")
     source_type = "image"
   }
+
+  defined_tags = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 
 data "oci_core_vnic_attachments" "WordPress_vnics" {
@@ -80,6 +94,7 @@ resource "oci_core_public_ip" "WordPress_public_ip" {
   display_name   = "WordPress_public_ip"
   lifetime       = "RESERVED"
   private_ip_id  = data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"]
+  defined_tags   = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 
 data "template_file" "setup_wp" {

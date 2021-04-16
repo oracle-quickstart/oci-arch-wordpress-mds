@@ -1,14 +1,21 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 variable "tenancy_ocid" {}
 variable "compartment_ocid" {}
 variable "region" {}
-variable "fingerprint" {}
-variable "private_key_path" {}
-variable "user_ocid" {}
+#variable "fingerprint" {}
+#variable "private_key_path" {}
+#variable "user_ocid" {}
 variable "availablity_domain_name" {}
+
+variable "ssh_public_key" {
+  default = ""
+}
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.0"
+  default     = "1.1"
 }
 
 variable "vcn" {
@@ -21,7 +28,15 @@ variable "vcn_cidr" {
 }
 
 variable "node_shape" {
-  default     = "VM.Standard.E2.1"
+  default = "VM.Standard.E3.Flex"
+}
+
+variable "node_flex_shape_ocpus" {
+  default = 1
+}
+
+variable "node_flex_shape_memory" {
+  default = 10
 }
 
 variable "label_prefix" {
@@ -35,7 +50,7 @@ variable "instance_os" {
 
 variable "linux_os_version" {
   description = "Operating system version for all Linux instances"
-  default     = "7.8"
+  default     = "8"
 }
 
 variable "admin_password" {
@@ -48,7 +63,11 @@ variable "admin_username" {
 }
 
 variable "mysql_shape" {
-    default = "VM.Standard.E2.1"
+  default = "MySQL.VM.Standard.E3.1.8GB"
+}
+
+variable "mysql_is_highly_available" {
+  default = false
 }
 
 variable "wp_name" {
@@ -100,3 +119,4 @@ variable "wp_site_admin_email" {
   description = "WordPress Site Admin Email"
   default = "admin@example.com"  
 } 
+

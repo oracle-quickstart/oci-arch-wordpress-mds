@@ -1,11 +1,18 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+resource "tls_private_key" "public_private_key_pair" {
+  algorithm = "RSA"
+}
+
 ## DATASOURCE
 # Init Script Files
 data "template_file" "install_php" {
   template = file("${path.module}/scripts/install_php74.sh")
 
   vars = {
-    mysql_version         = "${var.mysql_version}",
-    user                  = "${var.vm_user}"
+    mysql_version         = var.mysql_version
+    user                  = var.vm_user
   }
 }
 
@@ -30,6 +37,24 @@ data "template_file" "create_wp_db" {
   }
 }
 
+data "template_file" "key_script" {
+  template = file("${path.module}/scripts/sshkey.tpl")
+  vars = {
+    ssh_public_key = tls_private_key.public_private_key_pair.public_key_openssh
+  }
+}
+
+data "template_cloudinit_config" "cloud_init" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    filename     = "ainit.sh"
+    content_type = "text/x-shellscript"
+    content      = data.template_file.key_script.rendered
+  }
+}
+
 locals {
   php_script      = "~/install_php74.sh"
   wp_script       = "~/install_wp.sh"
@@ -44,6 +69,14 @@ resource "oci_core_instance" "WordPress" {
   display_name        = "${var.label_prefix}${var.display_name}"
   shape               = var.shape
 
+  dynamic "shape_config" {
+    for_each = local.is_flexible_node_shape ? [1] : []
+    content {
+      memory_in_gbs = var.flex_shape_memory
+      ocpus = var.flex_shape_ocpus
+    }
+  }
+
   create_vnic_details {
     subnet_id        = var.subnet_id
     display_name     = "${var.label_prefix}${var.display_name}"
@@ -53,6 +86,7 @@ resource "oci_core_instance" "WordPress" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_authorized_keys
+    user_data = data.template_cloudinit_config.cloud_init.rendered
   }
 
   source_details {
@@ -116,7 +150,7 @@ resource "null_resource" "WordPress_provisioner" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = var.ssh_private_key
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
 
     }
   }
@@ -131,7 +165,7 @@ resource "null_resource" "WordPress_provisioner" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = var.ssh_private_key
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
 
     }
   }
@@ -146,7 +180,7 @@ resource "null_resource" "WordPress_provisioner" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = var.ssh_private_key
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
 
     }
   }
@@ -161,7 +195,7 @@ resource "null_resource" "WordPress_provisioner" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = var.ssh_private_key
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
 
     }
   }
@@ -176,7 +210,7 @@ resource "null_resource" "WordPress_provisioner" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = var.ssh_private_key
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
 
     }
   }
@@ -188,7 +222,7 @@ resource "null_resource" "WordPress_provisioner" {
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
-      private_key = var.ssh_private_key
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
 
     }
    

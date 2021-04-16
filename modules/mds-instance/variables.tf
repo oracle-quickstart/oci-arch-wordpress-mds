@@ -1,3 +1,6 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 variable "compartment_ocid" {
   description = "Compartment's OCID where VCN will be created. "
 }
@@ -19,7 +22,7 @@ variable "subnet_id" {
 
 variable "mysql_shape" {
   description = "Instance shape to use."
-  default     = "VM.Standard.E2.1"
+  default     = "MySQL.VM.Standard.E3.1.8GB"
 }
 
 variable "admin_username" {
@@ -33,6 +36,10 @@ variable "admin_password" {
 
 variable "configuration_id" {
     description = "MySQL Instance Configuration ID"
+}
+
+variable "mysql_is_highly_available" {
+  default = false
 }
 
 variable "mysql_data_storage_in_gb" {

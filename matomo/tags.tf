@@ -8,7 +8,7 @@ resource "random_id" "tag" {
 resource "oci_identity_tag_namespace" "ArchitectureCenterTagNamespace" {
     compartment_id = var.compartment_ocid
     description = "ArchitectureCenterTagNamespace"
-    name = "ArchitectureCenter\\deploy-wordpress-cms-with-mysql-dbs-${random_id.tag.hex}"
+    name = "ArchitectureCenter\\wordpress-matomo-oci-${random_id.tag.hex}"
   
     provisioner "local-exec" {
        command = "sleep 10"
