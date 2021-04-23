@@ -13,20 +13,17 @@ data "oci_core_images" "InstanceImageOCID" {
   }
 }
 
-data "template_file" "key_script" {
-  template = file("./scripts/sshkey.tpl")
-  vars = {
-    ssh_public_key = tls_private_key.public_private_key_pair.public_key_openssh
-  }
+data "oci_mysql_mysql_configurations" "shape" {
+    compartment_id = var.compartment_ocid
+    type = ["DEFAULT"]
+    shape_name = var.mysql_shape
 }
 
-data "template_cloudinit_config" "cloud_init" {
-  gzip          = true
-  base64_encode = true
+data "oci_identity_region_subscriptions" "home_region_subscriptions" {
+    tenancy_id = var.tenancy_ocid
 
-  part {
-    filename     = "ainit.sh"
-    content_type = "text/x-shellscript"
-    content      = data.template_file.key_script.rendered
-  }
+    filter {
+      name   = "is_home_region"
+      values = [true]
+    }
 }
