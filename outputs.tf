@@ -1,5 +1,8 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 output "wordpress_public_ip" {
-  value = "${module.wordpress.public_ip}"
+  value = module.wordpress.public_ip
 }
 
 output "wordpress_wp-admin_url" {
@@ -15,9 +18,5 @@ output "wordpress_wp-admin_password" {
 }
 
 output "mds_instance_ip" {
-  value = "${module.mds-instance.private_ip}"
-}
-
-output "generated_ssh_private_key" {
-  value = tls_private_key.public_private_key_pair.private_key_pem
+  value = module.mds-instance.private_ip
 }

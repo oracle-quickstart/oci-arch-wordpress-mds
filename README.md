@@ -113,4 +113,8 @@ When you no longer need the deployment, you can run this command to destroy the 
 
 ![](./images/architecture-deploy-wordpress-mds.png)
 
+## Reference Archirecture
+
+For details of the architecture, see [_Set up a WordPress CMS connected to a MySQL database in the cloud_](https://docs.oracle.com/en/solutions/deploy-wordpress-cms-with-mysql-dbs/index.html)
+
 

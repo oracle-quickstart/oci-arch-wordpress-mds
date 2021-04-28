@@ -1,3 +1,6 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 variable "mysql_version" {
   description = "The version of the Mysql Shell."
   default     = "8.0.21"
@@ -23,8 +26,15 @@ variable "subnet_id" {
 }
 
 variable "shape" {
-  description = "Instance shape to use for master instance. "
-  default     = "VM.Standard2.1"
+  default = "VM.Standard.E3.Flex"
+}
+
+variable "flex_shape_ocpus" {
+  default = 1
+}
+
+variable "flex_shape_memory" {
+  default = 10
 }
 
 variable "label_prefix" {
@@ -116,4 +126,17 @@ variable "wp_site_admin_email" {
 variable "defined_tags" {
   description = "Defined tags for WordPress host."
   default     = ""
+}
+
+# Dictionary Locals
+locals {
+  compute_flexible_shapes = [
+    "VM.Standard.E3.Flex",
+    "VM.Standard.E4.Flex"
+  ]
+}
+
+# Checks if is using Flexible Compute Shapes
+locals {
+  is_flexible_node_shape = contains(local.compute_flexible_shapes, var.shape)
 }

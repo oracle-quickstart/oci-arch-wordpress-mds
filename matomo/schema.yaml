@@ -10,6 +10,7 @@ variableGroups:
   variables:
   - tenancy_ocid
   - region
+  - release
 
 - title: Required Configuration
   visible: true  
@@ -20,31 +21,67 @@ variableGroups:
   - wp_password
   - wp_site_admin_pass
   - matomo_password
+  - show_advanced
 
-- title: Optional Configuration
-  visible: true
+- title: Network Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - vcn
+  - vcn_cidr
+
+- title: Compute Instances Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - ssh_public_key
+  - instance_os
+  - linux_os_version
+  - label_prefix
+  - node_shape
+  - node_flex_shape_ocpus
+  - node_flex_shape_memory
+
+- title: WordPress Optional Configuration
+  visible: 
+      and:
+        - show_advanced
   variables:
   - wp_site_admin_email
   - wp_site_admin_user
   - wp_plugins
   - wp_themes
-  - vcn
-  - vcn_cidr
-  - instance_os
-  - linux_os_version
-  - label_prefix
-  - node_shape
-  - mysql_shape
-  - mysql_version
-  - admin_username
   - wp_name
   - wp_schema
   - wp_site_url
   - wp_site_title
+
+- title: MySQL Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
+  - mysql_version
+  - admin_username
+
+- title: Matomo Optional Configuration
+  visible: 
+      and:
+        - show_advanced
+  variables:
   - matomo_username
   - matomo_schema
 
 variables:
+
+  show_advanced:
+    type: boolean
+    title: "Show advanced options?"
+    description: "Shows advanced options."
+    visible: true
+    default: false
 
   compartment_ocid:
     type: oci:identity:compartment:id
@@ -69,6 +106,12 @@ variables:
     dependsOn:
       regionName: ${region}
       compartmentId: ${compartment_ocid}
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    title: "Public SSH Key"
+    description: "Choose public SSH Key to be uploaded into compute instances."
+    required: false
 
   admin_password:
     type: password
@@ -152,14 +195,53 @@ variables:
     title: "VCN CIDR"
     description: "Choose VCN CIDR for your WordPress and Matomo deployments."
 
+
   node_shape:
     type: oci:core:instanceshape:name
     required: false
     title: "Wordpress and Matomo compute shape"
     description: "Choose Instance Shape for WordPress and Matomo compute instances."
-    default: "VM.Standard2.1"
+    default: "VM.Standard.E3.Flex"
     dependsOn:
       compartmentId: ${compartment_ocid}
+
+  node_flex_shape_ocpus:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 1
+    title: "Flex Shape OCPUs"
+    description: "Choose number of OCPUs for Flex Shape."
+    visible:
+      and:
+        - or:
+          - eq:
+            - node_shape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Standard.E4.Flex"
+
+  node_flex_shape_memory:
+    type: number
+    required: false
+    minimum: 1
+    maximum: 128
+    multipleOf: 1
+    default: 10
+    title: "Flex Shape Memory (GB)"
+    description: "Choose number GB for Flex Shape Memory."
+    visible:
+      and:
+        - or:
+          - eq:
+            - node_shape 
+            - "VM.Standard.E3.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Standard.E4.Flex"
 
   instance_os:
     type: enum
@@ -179,18 +261,8 @@ variables:
     description: "An Operating System version that determines the operating system version for WordPress and Matomo hosts."
     default: "8"
     enum:
-      - "7.8"
       - "7.9"
       - "8"
-
-  mysql_shape:
-    type: oci:core:instanceshape:name
-    required: false
-    default: "VM.Standard.E2.1"
-    title: "MySQL Compute VM Shape"
-    description: "Choose MySQL Compute VM for your WordPress CMS and Matomo deployments."
-    dependsOn:
-      compartmentId: ${compartment_ocid}
   
   mysql_version:
     type: enum
