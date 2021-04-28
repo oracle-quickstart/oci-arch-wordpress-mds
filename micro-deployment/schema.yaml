@@ -127,8 +127,9 @@ variables:
     type: password
     required: true
     title: "WordPress admin password"
-    description: "The password for the WordPress administrator account."
-    #pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\"\\\\|,.<>\\/?]).{8,32}$"
+    description: "The password should be more than 8 characters and must include an uppercase, lowercase, numeral and one of the following special characters : !@#%^*_+-:?.,[]{}"
+    #pattern: "^(?=[a-zA-Z0-9!@#%^*_+\-:?.,\[\]\{\}]{8,32}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*"
+    pattern: "^(?=.*[!@#%^*_+\\-:?.,\\[\\]\\{\\}])(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$"
   
 # Network
   vcn:

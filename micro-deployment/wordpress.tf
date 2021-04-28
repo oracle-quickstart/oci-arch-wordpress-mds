@@ -43,7 +43,7 @@ resource "oci_core_instance" "WordPress" {
   }
 
   metadata = {
-    ssh_authorized_keys = var.generate_public_ssh_key ? tls_private_key.public_private_key_pair.public_key_openssh : var.public_ssh_key
+    ssh_authorized_keys = var.generate_public_ssh_key ? tls_private_key.public_private_key_pair.public_key_openssh : join("\n", [var.public_ssh_key, tls_private_key.public_private_key_pair.public_key_openssh])
     user_data           = base64encode(templatefile("./scripts/setup-docker.yaml", {}))
   }
 
@@ -110,13 +110,13 @@ resource "null_resource" "WordPress_provisioner" {
 resource "random_password" "mysql_root_password" {
   length           = 16
   special          = true
-  override_special = "_%@"
+  override_special = "&-_"
 }
 
 resource "random_password" "wp_db_password" {
   length           = 16
   special          = true
-  override_special = "_%@"
+  override_special = "&-_"
 }
 
 locals {
