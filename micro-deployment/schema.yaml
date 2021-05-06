@@ -15,6 +15,7 @@ variableGroups:
   - region
   - instance_os
   - linux_os_version
+  - label_prefix
 
 - title: WordPress Configuration
   visible: true  
