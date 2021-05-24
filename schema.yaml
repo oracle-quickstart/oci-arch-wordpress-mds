@@ -202,6 +202,12 @@ variables:
           - eq:
             - node_shape 
             - "VM.Standard.E4.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Optimized3.Flex"
 
   node_flex_shape_memory:
     type: number
@@ -221,6 +227,12 @@ variables:
           - eq:
             - node_shape 
             - "VM.Standard.E4.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Standard.A1.Flex"
+          - eq:
+            - node_shape 
+            - "VM.Optimized3.Flex"
 
   linux_os_version:
     type: enum

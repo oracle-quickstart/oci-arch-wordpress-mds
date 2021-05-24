@@ -15,7 +15,7 @@ variable "ssh_public_key" {
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.1"
+  default     = "1.2"
 }
 
 variable "vcn" {

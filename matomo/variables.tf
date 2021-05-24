@@ -11,7 +11,7 @@ variable "availablity_domain_name" {}
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.1"
+  default     = "1.2"
 }
 
 variable "ssh_public_key" {
@@ -28,7 +28,7 @@ variable "vcn_cidr" {
 }
 
 variable "node_shape" {
-  default = "VM.Standard.E3.Flex"
+  default = "VM.Standard.A1.Flex"
 }
 
 variable "node_flex_shape_ocpus" {
@@ -134,6 +134,8 @@ locals {
   compute_flexible_shapes = [
     "VM.Standard.E3.Flex",
     "VM.Standard.E4.Flex",  
+    "VM.Standard.A1.Flex",
+    "VM.Optimized3.Flex"
   ]
 }
 
