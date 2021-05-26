@@ -143,4 +143,7 @@ When you no longer need the deployment, you can run this command to destroy the 
 
 ![](./images/architecture-deploy-wordpress-mysql-matomo.png)
 
+## Reference Archirecture
+
+For details of the architecture, see [_Set up WordPress with MySQL Database and Matomo Analytics using Arm-based Ampere A1 Compute resources_](https://docs.oracle.com/en/solutions/wordpress-arm-based-oci/index.html)
 
