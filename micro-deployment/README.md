@@ -43,14 +43,24 @@ region = "<oci_region>"
 # Availablity Domain 
 availablity_domain_name = "<availablity_domain_name>"
 
+# WordPress Admin Password
+wp_admin_password = "<wp_admin_password>"
 ```
 
-You also need to uncomment the following lines in the `provider.tf`.
+You need to uncomment the following lines in the `provider.tf`.
 ```
    user_ocid = var.user_ocid
    fingerprint = var.fingerprint
    private_key_path = var.private_key_path
 ```
+
+You also need to uncomment the following lines in the `variables.tf`.
+```
+   variable "fingerprint" {}
+   variable "private_key_path" {}
+   variable "user_ocid" {}
+```
+
 ### Create the Resources
 Run the following commands:
 
