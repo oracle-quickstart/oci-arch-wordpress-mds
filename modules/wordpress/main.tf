@@ -342,7 +342,9 @@ data "oci_core_vnic" "WordPress_vnic1" {
 
 data "oci_core_private_ips" "WordPress_private_ips1" {
   depends_on = [oci_core_instance.WordPress]
-  vnic_id    = data.oci_core_vnic.WordPress_vnic1.id
+  #vnic_id    = data.oci_core_vnic.WordPress_vnic1.id
+  vnic_id   = oci_core_instance.WordPress.private_ip
+  subnet_id = var.wp_subnet_id
 }
 
 resource "oci_core_public_ip" "WordPress_public_ip_for_single_node" {
