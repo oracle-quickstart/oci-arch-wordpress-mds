@@ -171,7 +171,7 @@ resource "oci_core_security_list" "private_security_list" {
 
 resource "oci_core_subnet" "wp_subnet" {
   cidr_block                 = cidrsubnet(var.vcn_cidr, 8, 2)
-  display_name               = "wp_private_subnet"
+  display_name               = "wp_subnet"
   compartment_id             = var.compartment_ocid
   vcn_id                     = oci_core_virtual_network.wpmdsvcn.id
   route_table_id             = var.numberOfNodes > 1 ? oci_core_route_table.private_route_table.id : oci_core_route_table.public_route_table.id

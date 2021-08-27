@@ -329,26 +329,31 @@ resource "oci_core_instance" "WordPress" {
 }
 
 data "oci_core_vnic_attachments" "WordPress_vnics" {
+  depends_on          = [oci_core_instance.WordPress]
   compartment_id      = var.compartment_ocid
   availability_domain = var.availability_domain == "" ? lookup(data.oci_identity_availability_domains.ADs.availability_domains[0], "name") : var.availability_domain
   instance_id         = oci_core_instance.WordPress.id
 }
 
 data "oci_core_vnic" "WordPress_vnic1" {
-  vnic_id = data.oci_core_vnic_attachments.WordPress_vnics.vnic_attachments[0]["vnic_id"]
+  depends_on = [oci_core_instance.WordPress]
+  vnic_id    = data.oci_core_vnic_attachments.WordPress_vnics.vnic_attachments[0]["vnic_id"]
 }
 
 data "oci_core_private_ips" "WordPress_private_ips1" {
-  vnic_id = data.oci_core_vnic.WordPress_vnic1.id
+  depends_on = [oci_core_instance.WordPress]
+  vnic_id    = data.oci_core_vnic.WordPress_vnic1.id
 }
 
 resource "oci_core_public_ip" "WordPress_public_ip_for_single_node" {
+  depends_on     = [oci_core_instance.WordPress]
   count          = var.numberOfNodes == 1 ? 1 : 0
   compartment_id = var.compartment_ocid
   display_name   = "WordPress_public_ip"
   lifetime       = "RESERVED"
-  private_ip_id  = var.numberOfNodes == 1 ? data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"] : null
-  defined_tags   = var.defined_tags
+  #  private_ip_id  = var.numberOfNodes == 1 ? data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"] : null
+  private_ip_id = data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"]
+  defined_tags  = var.defined_tags
 }
 
 resource "oci_core_public_ip" "WordPress_public_ip_for_multi_node" {
