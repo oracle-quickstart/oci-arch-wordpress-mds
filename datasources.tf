@@ -14,17 +14,38 @@ data "oci_core_images" "InstanceImageOCID" {
   }
 }
 
+data "oci_core_images" "InstanceImageOCID2" {
+  compartment_id           = var.compartment_ocid
+  operating_system         = var.instance_os
+  operating_system_version = var.linux_os_version
+  shape                    = var.bastion_shape
+
+  filter {
+    name   = "display_name"
+    values = ["^.*Oracle[^G]*$"]
+    regex  = true
+  }
+}
+
 data "oci_mysql_mysql_configurations" "shape" {
-    compartment_id = var.compartment_ocid
-    type = ["DEFAULT"]
-    shape_name = var.mysql_shape
+  compartment_id = var.compartment_ocid
+  type           = ["DEFAULT"]
+  shape_name     = var.mysql_shape
 }
 
 data "oci_identity_region_subscriptions" "home_region_subscriptions" {
-    tenancy_id = var.tenancy_ocid
+  tenancy_id = var.tenancy_ocid
 
-    filter {
-      name   = "is_home_region"
-      values = [true]
-    }
+  filter {
+    name   = "is_home_region"
+    values = [true]
+  }
+}
+
+data "oci_core_instances" "wordpress_instances" {
+  compartment_id = var.compartment_ocid
+}
+
+data "oci_identity_availability_domains" "ADs" {
+  compartment_id = var.tenancy_ocid
 }

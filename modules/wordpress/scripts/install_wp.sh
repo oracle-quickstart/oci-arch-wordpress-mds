@@ -2,7 +2,7 @@
 #set -x
 
 echo "Starting Wordpress installation..."
-cd /var/www/
+cd ${wp_working_dir}/www/
 wget https://wordpress.org/latest.tar.gz
 tar zxvf latest.tar.gz
 rm -rf html/ latest.tar.gz
