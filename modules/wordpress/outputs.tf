@@ -6,7 +6,7 @@ output "id" {
 }
 
 output "public_ip" {
-  value = var.numberOfNodes == 1 ? oci_core_public_ip.WordPress_public_ip_for_single_node.*.ip_address : oci_core_public_ip.WordPress_public_ip_for_multi_node.*.ip_address
+  value = var.numberOfNodes > 1 ? oci_core_public_ip.WordPress_public_ip_for_multi_node.*.ip_address : oci_core_public_ip.WordPress_public_ip_for_single_node.*.ip_address
 }
 
 output "wordpress_nodes_ids" {

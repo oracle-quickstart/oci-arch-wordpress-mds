@@ -342,16 +342,16 @@ data "oci_core_vnic" "WordPress_vnic1" {
 
 data "oci_core_private_ips" "WordPress_private_ips1" {
   depends_on = [oci_core_instance.WordPress]
-  #vnic_id    = data.oci_core_vnic.WordPress_vnic1.id
-  vnic_id   = oci_core_instance.WordPress.private_ip
+  vnic_id    = data.oci_core_vnic.WordPress_vnic1.id
+  #vnic_id   = oci_core_instance.WordPress.private_ip
   subnet_id = var.wp_subnet_id
 }
 
 resource "oci_core_public_ip" "WordPress_public_ip_for_single_node" {
   depends_on     = [oci_core_instance.WordPress]
-  count          = var.numberOfNodes == 1 ? 1 : 0
+  count          = var.numberOfNodes > 1 ? 0 : 1
   compartment_id = var.compartment_ocid
-  display_name   = "WordPress_public_ip"
+  display_name   = "WordPress_public_ip_for_single_node"
   lifetime       = "RESERVED"
   #  private_ip_id  = var.numberOfNodes == 1 ? data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"] : null
   private_ip_id = data.oci_core_private_ips.WordPress_private_ips1.private_ips[0]["id"]
@@ -359,9 +359,9 @@ resource "oci_core_public_ip" "WordPress_public_ip_for_single_node" {
 }
 
 resource "oci_core_public_ip" "WordPress_public_ip_for_multi_node" {
-  count          = var.numberOfNodes == 1 ? 0 : 1
+  count          = var.numberOfNodes > 1 ? 1 : 0
   compartment_id = var.compartment_ocid
-  display_name   = "WordPress_public_ip"
+  display_name   = "WordPress_public_ip_for_multi_node"
   lifetime       = "RESERVED"
   defined_tags   = var.defined_tags
 }
@@ -374,7 +374,7 @@ data "template_file" "setup_wp" {
     wp_password           = var.wp_password
     wp_schema             = var.wp_schema
     mds_ip                = var.mds_ip
-    wp_site_url           = var.numberOfNodes == 1 ? oci_core_public_ip.WordPress_public_ip_for_single_node[0].ip_address : oci_core_public_ip.WordPress_public_ip_for_multi_node[0].ip_address
+    wp_site_url           = var.numberOfNodes > 1 ? oci_core_public_ip.WordPress_public_ip_for_multi_node[0].ip_address : oci_core_public_ip.WordPress_public_ip_for_single_node[0].ip_address
     wp_site_title         = var.wp_site_title
     wp_site_admin_user    = var.wp_site_admin_user
     wp_site_admin_pass    = var.wp_site_admin_pass
