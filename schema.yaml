@@ -11,6 +11,8 @@ variableGroups:
   - tenancy_ocid
   - region
   - release
+  - numberOfNodes
+  - mysql_is_highly_available
 
 - title: Required Configuration
   visible: true  
@@ -20,7 +22,6 @@ variableGroups:
   - admin_password
   - wp_password
   - wp_site_admin_pass
-  - numberOfNodes
   - show_advanced
 
 - title: Load Balancer Configuration
@@ -91,8 +92,6 @@ variableGroups:
   variables:
   - mysql_shape
   - admin_username
-  - mysql_is_highly_available
-
 
 variables:
 
@@ -162,7 +161,7 @@ variables:
     minimum: 1
     maximum: 128
     multipleOf: 1
-    default: 2
+    default: 1
     title: "How many WordPress Nodes?"
     description: "Choose number of WordPress Nodes to be deployed (more then one will create LoadBalancer)."
 

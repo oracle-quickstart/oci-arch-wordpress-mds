@@ -43,7 +43,7 @@ variable "vcn_cidr" {
 
 variable "numberOfNodes" {
   description = "Create one or more nodes with WordPress"
-  default     = 2
+  default     = 1
 }
 
 variable "use_shared_storage" {
