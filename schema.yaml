@@ -1,4 +1,4 @@
-title: "Deploy WordPress CMD on OCI with MDS"
+title: "Deploy WordPress CMS on OCI with MDS"
 stackDescription: "Deploy WordPress CMS on OCI with MySQL Database Service"
 schemaVersion: 1.2.0
 version: "20201104"

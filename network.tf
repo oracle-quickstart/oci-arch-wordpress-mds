@@ -196,7 +196,7 @@ resource "oci_core_subnet" "lb_subnet_public" {
 }
 
 resource "oci_core_subnet" "bastion_subnet_public" {
-  count             = var.numberOfNodes > 1 ? 1 : 0
+  count             = (var.numberOfNodes > 1 && var.use_bastion_service == false) ? 1 : 0
   cidr_block        = cidrsubnet(var.vcn_cidr, 8, 1)
   display_name      = "bastion_public_subnet"
   compartment_id    = var.compartment_ocid

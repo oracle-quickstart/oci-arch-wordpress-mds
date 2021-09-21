@@ -17,7 +17,7 @@ module "wordpress" {
   display_name              = "wordpress"
   wp_subnet_id              = oci_core_subnet.wp_subnet.id
   lb_subnet_id              = var.numberOfNodes > 1 ? oci_core_subnet.lb_subnet_public[0].id : ""
-  bastion_subnet_id         = var.numberOfNodes > 1 ? oci_core_subnet.bastion_subnet_public[0].id : ""
+  bastion_subnet_id         = (var.numberOfNodes > 1 && var.use_bastion_service == false) ? oci_core_subnet.bastion_subnet_public[0].id : ""
   fss_subnet_id             = var.numberOfNodes > 1 && var.use_shared_storage ? oci_core_subnet.fss_subnet_private[0].id : ""
   ssh_authorized_keys       = var.ssh_public_key
   mds_ip                    = module.mds-instance.private_ip

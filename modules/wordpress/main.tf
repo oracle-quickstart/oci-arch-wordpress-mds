@@ -423,10 +423,11 @@ resource "oci_core_instance" "bastion_instance" {
 
 
 resource "oci_bastion_bastion" "bastion-service" {
-  count                        = var.numberOfNodes > 1 && var.use_bastion_service ? 1 : 0
-  bastion_type                 = "STANDARD"
-  compartment_id               = var.compartment_ocid
-  target_subnet_id             = var.bastion_subnet_id
+  count            = var.numberOfNodes > 1 && var.use_bastion_service ? 1 : 0
+  bastion_type     = "STANDARD"
+  compartment_id   = var.compartment_ocid
+  target_subnet_id = var.wp_subnet_id
+  #target_subnet_id             = var.bastion_subnet_id
   client_cidr_block_allow_list = ["0.0.0.0/0"]
   name                         = "BastionService4WP"
   max_session_ttl_in_seconds   = 10800

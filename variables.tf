@@ -29,7 +29,7 @@ variable "flex_lb_max_shape" {
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.3"
+  default     = "1.4"
 }
 
 variable "vcn" {
