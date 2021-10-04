@@ -16,6 +16,9 @@ chown -R apache:apache ${wp_working_dir}/www/html/
 /usr/local/bin/wp theme install ${wp_themes} --path='${wp_working_dir}/www/html/'
 setsebool -P httpd_can_network_connect 1
 systemctl restart php-fpm
+cp /home/opc/htaccess ${wp_working_dir}/www/html/.htaccess
+rm /home/opc/htaccess
+chmod 774 ${wp_working_dir}/www/html/.htaccess
 chown -R apache:apache ${wp_working_dir}/www/html/
 echo "wp-cli installed, wp config, user, plugin theme executed."
 

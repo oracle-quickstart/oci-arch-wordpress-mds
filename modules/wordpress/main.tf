@@ -28,7 +28,6 @@ data "template_file" "setup_fss" {
   }
 }
 
-
 data "template_file" "install_wp" {
   template = file("${path.module}/scripts/install_wp.sh")
 
@@ -79,6 +78,7 @@ locals {
   create_wp_db    = "~/create_wp_db.sh"
   setup_wp        = "~/setup_wp.sh"
   setup_fss       = "~/setup_fss.sh"
+  htaccess        = "~/htaccess"
 }
 
 data "oci_core_subnet" "wp_subnet_ds" {
@@ -474,6 +474,20 @@ resource "null_resource" "WordPress_provisioner_without_bastion" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/scripts/htaccess"
+    destination = local.htaccess
+
+    connection {
+      type        = "ssh"
+      host        = oci_core_public_ip.WordPress_public_ip_for_single_node[0].ip_address
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
+    }
+  }
+
+  provisioner "file" {
     content     = data.template_file.install_wp.rendered
     destination = local.wp_script
 
@@ -575,6 +589,23 @@ resource "null_resource" "WordPress_provisioner_with_bastion" {
   provisioner "file" {
     content     = data.template_file.install_php.rendered
     destination = local.php_script
+
+    connection {
+      type                = "ssh"
+      host                = data.oci_core_vnic.WordPress_vnic1.private_ip_address
+      agent               = false
+      timeout             = "5m"
+      user                = var.vm_user
+      private_key         = tls_private_key.public_private_key_pair.private_key_pem
+      bastion_host        = var.use_bastion_service ? "host.bastion.${var.bastion_service_region}.oci.oraclecloud.com" : oci_core_instance.bastion_instance[0].public_ip
+      bastion_user        = var.use_bastion_service ? oci_bastion_session.ssh_via_bastion_service[0].id : var.vm_user
+      bastion_private_key = tls_private_key.public_private_key_pair.private_key_pem
+    }
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/scripts/htaccess"
+    destination = local.htaccess
 
     connection {
       type                = "ssh"
