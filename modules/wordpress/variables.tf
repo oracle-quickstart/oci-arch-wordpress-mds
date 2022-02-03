@@ -143,6 +143,11 @@ variable "vm_user" {
   default     = "opc"
 }
 
+variable "wp_version" {
+  description = "WordPress version"
+  default = "5.8"
+}
+
 variable "wp_name" {
   description = "WordPress Database User Name."
 }

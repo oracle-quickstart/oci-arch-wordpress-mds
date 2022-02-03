@@ -29,7 +29,7 @@ variable "flex_lb_max_shape" {
 
 variable "release" {
   description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.4.1"
+  default     = "1.4.2"
 }
 
 variable "vcn" {
@@ -108,6 +108,11 @@ variable "mysql_shape" {
 
 variable "mysql_is_highly_available" {
   default = false
+}
+
+variable "wp_version" {
+  description = "WordPress version"
+  default = "5.8"
 }
 
 variable "wp_name" {
