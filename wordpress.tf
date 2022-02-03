@@ -24,6 +24,7 @@ module "wordpress" {
   admin_password            = var.admin_password
   admin_username            = var.admin_username
   wp_schema                 = var.wp_schema
+  wp_version                = var.wp_version
   wp_name                   = var.wp_name
   wp_password               = var.wp_password
   wp_plugins                = split(",", var.wp_plugins)

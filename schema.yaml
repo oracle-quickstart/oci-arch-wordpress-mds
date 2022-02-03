@@ -75,6 +75,7 @@ variableGroups:
       and:
         - show_advanced
   variables:
+  - wp_version
   - wp_site_admin_email
   - wp_site_admin_user
   - wp_plugins
@@ -487,6 +488,26 @@ variables:
     minLength: 1
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
+
+  wp_version:
+    type: enum
+    required: false
+    visible: false
+    title: "WordPress Version"
+    description: "WordPress Version"
+    default: "5.8.3"
+    enum:
+      - "5.9"
+      - "5.8.3"
+      - "5.8.2"
+      - "5.8.1"
+      - "5.8"
+      - "5.7.5"
+      - "5.7.4"
+      - "5.7.3"
+      - "5.7.2"
+      - "5.7.1"
+      - "5.7"
 
   wp_name:
     type: string

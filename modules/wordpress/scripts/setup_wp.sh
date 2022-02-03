@@ -62,4 +62,39 @@ if [[ $use_shared_storage == "true" ]]; then
   ls -latr ${wp_shared_working_dir}/wp-content/
   chown -R apache:apache /sharedwp
   echo "WP-CONTENT in shared NFS space."
+
+  echo "Using shared storage, moving WP-ADMIN and WP-INCLUDES directories to shared NFS space."
+  mkdir ${wp_shared_working_dir}/wp-admin/
+  mkdir ${wp_shared_working_dir}/wp-includes/
+
+  echo "... moving WP-ADMIN/* ..."
+  cp -r ${wp_working_dir}/www/html/wp-admin/* ${wp_shared_working_dir}/wp-admin/
+  rm -rf ${wp_working_dir}/www/html/wp-admin/
+  ln -s ${wp_shared_working_dir}/wp-admin ${wp_working_dir}/www/html/wp-admin
+  chown -R apache:apache ${wp_shared_working_dir}/wp-admin
+  chown -R apache:apache ${wp_working_dir}/www/html/wp-admin
+  ls -latr ${wp_shared_working_dir}/wp-admin
+  echo "... WP-ADMIN/* moved to NFS..."
+
+  echo "... moving WP-INCLUDES/* ..."
+  cp -r ${wp_working_dir}/www/html/wp-includes/* ${wp_shared_working_dir}/wp-includes/
+  rm -rf ${wp_working_dir}/www/html/wp-includes/
+  ln -s ${wp_shared_working_dir}/wp-includes ${wp_working_dir}/www/html/wp-includes
+  chown -R apache:apache ${wp_shared_working_dir}/wp-includes
+  chown -R apache:apache ${wp_working_dir}/www/html/wp-includes
+  ls -latr ${wp_shared_working_dir}/wp-includes
+  echo "... WP-INCLUDES/* moved to NFS..."
+
+  echo "... coping rest of the root level PHP files and .htaccess ..."
+  cp -r ${wp_working_dir}/www/html/*.php ${wp_shared_working_dir}/
+  cp -r ${wp_working_dir}/www/html/.htaccess ${wp_shared_working_dir}/
+  chown -R apache:apache ${wp_shared_working_dir}/*.php
+  chown -R apache:apache ${wp_working_dir}/www/html/*.php
+  ls -latr ${wp_shared_working_dir}/*.php
+  ls -latr ${wp_shared_working_dir}/.htaccess  
+  echo "... root level PHP files and .htaccess copied to NFS..."
+
+  echo "... Changing /etc/httpd/conf/httpd.conf with Document set to new shared NFS space ..."
+  sed -i 's/"\/var\/www\/html"/"\/sharedwp"/g' /etc/httpd/conf/httpd.conf
+  echo "... /etc/httpd/conf/httpd.conf with Document set to new shared NFS space ..."
 fi

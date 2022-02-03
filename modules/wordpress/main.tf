@@ -33,6 +33,7 @@ data "template_file" "install_wp" {
 
   vars = {
     wp_working_dir = var.wp_working_dir
+    wp_version     = var.wp_version
   }
 }
 
