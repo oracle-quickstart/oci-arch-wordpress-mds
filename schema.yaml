@@ -76,6 +76,7 @@ variableGroups:
       and:
         - show_advanced
   variables:
+  - wp_auto_update
   - wp_site_admin_email
   - wp_site_admin_user
   - wp_plugins
@@ -488,6 +489,13 @@ variables:
     minLength: 1
     maxLength: 14
     pattern: "^[a-zA-Z][a-zA-Z0-9]+$"
+
+  wp_auto_update:
+    type: boolean
+    title: "WordPress Auto Update"
+    description: "Check if you want to enable automatic updates for WordPress."
+    visible: true
+    default: false
 
   wp_version:
     type: enum

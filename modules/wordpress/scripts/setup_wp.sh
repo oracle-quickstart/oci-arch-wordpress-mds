@@ -1,15 +1,25 @@
 #!/bin/bash
 #set -x
 
+
+echo "Customize httpd.conf for WP..."
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 512M/g' /etc/php.ini
+sed -i '/<Directory "\/var\/www\/html">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+sed -i '/<Directory "\/var\/www">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
+systemctl start httpd
+systemctl enable httpd
+
 echo "Starting wp-cli installation..."
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 /usr/local/bin/wp --info
-/usr/local/bin/wp core download --path='${wp_working_dir}/www/html/'
+/usr/local/bin/wp core download --path='${wp_working_dir}/www/html/' --skip-content --force --version=${wp_version}
 /usr/local/bin/wp config create --dbname=${wp_schema} --dbuser=${wp_name} --dbpass=${wp_password} --dbhost=${mds_ip} --skip-check --path='${wp_working_dir}/www/html/'
 echo '${wp_site_admin_pass}' >> admin_password.txt
+/usr/local/bin/wp core version --path='${wp_working_dir}/www/html'
 /usr/local/bin/wp core install --path='${wp_working_dir}/www/html/'  --url=${wp_site_url} --title='${wp_site_title}' --admin_user=${wp_site_admin_user} --admin_email=${wp_site_admin_email} --prompt=admin_password < admin_password.txt
+/usr/local/bin/wp core version --path='${wp_working_dir}/www/html'
 chown -R apache:apache ${wp_working_dir}/www/html/
 /usr/local/bin/wp plugin install ${wp_plugins} --path='${wp_working_dir}/www/html/'
 chown -R apache:apache ${wp_working_dir}/www/html/
@@ -18,8 +28,24 @@ setsebool -P httpd_can_network_connect 1
 systemctl restart php-fpm
 cp /home/opc/htaccess ${wp_working_dir}/www/html/.htaccess
 rm /home/opc/htaccess
-chmod 774 ${wp_working_dir}/www/html/.htaccess
 chown -R apache:apache ${wp_working_dir}/www/html/
+find ${wp_working_dir}/www/html/ -type d -exec chmod 755 '{}' \;
+find ${wp_working_dir}/www/html/ -type f -exec chmod 644 '{}' \;
+chown -R apache:apache ${wp_working_dir}/www/html/
+chcon -R --type httpd_sys_rw_content_t ${wp_working_dir}/www/html/
+chmod 774 ${wp_working_dir}/www/html/.htaccess
+/usr/local/bin/wp core update --version=${wp_version} --force --path='${wp_working_dir}/www/html'
+/usr/local/bin/wp core version --path='${wp_working_dir}/www/html'
+export wp_auto_update='${wp_auto_update}'
+if [[ $wp_auto_update == "false" ]]; then
+  echo "WordPress Auto Update will be disabled."
+  echo "define( 'WP_AUTO_UPDATE_CORE', false );" >> /var/www/html/wp-config.php
+else 
+  echo "WordPress Auto Update will be enabled."
+  echo "define( 'WP_AUTO_UPDATE_CORE', true );" >> /var/www/html/wp-config.php
+fi
+chown apache:apache /var/www/html/wp-config.php
+
 echo "wp-cli installed, wp config, user, plugin theme executed."
 
 export use_shared_storage='${use_shared_storage}'
@@ -90,6 +116,12 @@ if [[ $use_shared_storage == "true" ]]; then
   cp -r ${wp_working_dir}/www/html/.htaccess ${wp_shared_working_dir}/
   chown -R apache:apache ${wp_shared_working_dir}/*.php
   chown -R apache:apache ${wp_working_dir}/www/html/*.php
+  chown -R apache:apache ${wp_working_dir}/www/html/
+  find ${wp_shared_working_dir}/ -type d -exec chmod 755 '{}' \;
+  find ${wp_shared_working_dir}/ -type f -exec chmod 644 '{}' \;
+  chown -R apache:apache ${wp_shared_working_dir}/
+  chcon -R --type httpd_sys_rw_content_t ${wp_shared_working_dir}/
+  chmod 774 ${wp_working_dir}/www/html/.htaccess
   ls -latr ${wp_shared_working_dir}/*.php
   ls -latr ${wp_shared_working_dir}/.htaccess  
   echo "... root level PHP files and .htaccess copied to NFS..."

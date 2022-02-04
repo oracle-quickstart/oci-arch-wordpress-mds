@@ -145,7 +145,11 @@ variable "vm_user" {
 
 variable "wp_version" {
   description = "WordPress version"
-  default = "5.8"
+  default = "5.9"
+}
+
+variable "wp_auto_update" {
+  default     = true
 }
 
 variable "wp_name" {

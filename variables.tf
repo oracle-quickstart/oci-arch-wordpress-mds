@@ -130,6 +130,10 @@ variable "wp_schema" {
   default     = "wordpress"
 }
 
+variable "wp_auto_update" {
+  default     = false
+}
+
 variable "wp_plugins" {
   description = "WordPress Plugins"
   default     = "hello-dolly,elementor"
