@@ -202,6 +202,9 @@ variables:
           - eq:
             - instance_shape 
             - "VM.Standard.E4.Flex"
+          - eq:
+            - instance_shape 
+            - "VM.Standard.A1.Flex"
 
   instance_shape_config_memory_in_gbs:
     type: integer
@@ -219,6 +222,9 @@ variables:
           - eq:
             - instance_shape 
             - "VM.Standard.E4.Flex"
+          - eq:
+            - instance_shape 
+            - "VM.Standard.A1.Flex"            
 
   instance_os:
     type: enum
